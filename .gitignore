@@ -1,6 +1,6 @@
-.idea
-./node_modules
+/.idea
+/node_modules
 ./dist
 .env.db
 .env
-./mongo_db
+/mongo_db
