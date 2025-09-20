@@ -6,7 +6,7 @@ import { IBase } from "./base.interface";
 import { IComment } from "./comment.interface";
 
 export interface IApplication extends IBase {
-    _id?: number;
+    _id: number;
     name: string;
     surname: string;
     email: string;
