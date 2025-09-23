@@ -34,4 +34,7 @@ const applicationSchema = new Schema(
         timestamps: true,
     },
 );
-export const User = model<IApplication>("Application", applicationSchema);
+export const Application = model<IApplication>(
+    "Application",
+    applicationSchema,
+);

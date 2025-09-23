@@ -15,6 +15,9 @@ const userSchema = new Schema(
             required: true,
             default: UserRoleEnum.MANAGER,
         },
+        isActive: { type: Boolean, default: false },
+        isBanned: { type: Boolean, default: false },
+        managerId: [{ type: Schema.Types.ObjectId, ref: "User" }],
     },
     {
         versionKey: false,

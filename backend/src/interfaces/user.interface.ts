@@ -2,7 +2,7 @@ import { UserRoleEnum } from "../enums/user.role.enum";
 import { IBase } from "./base.interface";
 
 export interface IUser extends IBase {
-    _id: number;
+    _id: string;
     email: string;
     password: string;
     firstName: string;
@@ -10,6 +10,7 @@ export interface IUser extends IBase {
     role: UserRoleEnum;
     isActive: boolean;
     isBanned: boolean;
+    managerId?: string[];
 }
 export type IManagerCreate = Pick<
     IUser,
