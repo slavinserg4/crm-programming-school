@@ -1,24 +1,18 @@
-import * as fs from "node:fs";
-import path from "node:path";
-
 /* eslint-disable no-console */
 import express, { NextFunction, Request, Response } from "express";
 import mongoose from "mongoose";
 
 import { config } from "./config/config";
+import { cronRunner } from "./crons";
 import { ApiError } from "./errors/api.error";
+import { apiRouter } from "./routers/api.router";
 
 const app = express();
 
-app.use(express.json({ limit: "10mb" }));
-app.use(express.urlencoded({ limit: "10mb", extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-const uploadDir = path.join(process.cwd(), "upload");
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-app.use("/media", express.static(path.join(process.cwd(), "upload")));
+app.use("/", apiRouter);
 
 app.use((err: ApiError, req: Request, res: Response, next: NextFunction) => {
     const status = err.status || 500;
@@ -51,6 +45,7 @@ const start = async () => {
         app.listen(config.PORT, async () => {
             console.log(`Server listening on ${config.PORT}`);
         });
+        await cronRunner();
     } catch (e) {
         console.log(e);
     }

@@ -3,7 +3,7 @@ services:
     build:
       context: .
     ports:
-      - "5555:6000"
+      - "5333:6000"
     env_file:
       - .env
     volumes:
