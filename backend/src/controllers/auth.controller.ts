@@ -42,19 +42,6 @@ class AuthController {
             next(e);
         }
     }
-    public async createManager(
-        req: Request,
-        res: Response,
-        next: NextFunction,
-    ) {
-        try {
-            const manager = req.body;
-            const createdManager = await authService.createManager(manager);
-            res.status(StatusCodesEnum.CREATED).json(createdManager);
-        } catch (e) {
-            next(e);
-        }
-    }
 }
 
 export const authController = new AuthController();

@@ -2,9 +2,9 @@ import { NextFunction, Request, Response } from "express";
 
 import { StatusCodesEnum } from "../enums/status-codes.enum";
 import { TokenTypeEnum } from "../enums/token-type.enum";
+import { UserRoleEnum } from "../enums/user.role.enum";
 import { ApiError } from "../errors/api.error";
 import { IRefresh, ITokenPayload } from "../interfaces/token.interface";
-import { authService } from "../services/auth.service";
 import { tokenService } from "../services/token.service";
 
 class AuthMiddleware {
@@ -89,7 +89,12 @@ class AuthMiddleware {
                     StatusCodesEnum.UNAUTHORIZED,
                 );
             }
-            await authService.isUserAdmin(tokenPayload.role);
+            if (tokenPayload.role !== UserRoleEnum.ADMIN) {
+                throw new ApiError(
+                    "You don’t have permission",
+                    StatusCodesEnum.FORBIDDEN,
+                );
+            }
             next();
         } catch (e) {
             next(e);

@@ -13,11 +13,4 @@ router.post(
 );
 router.get("/me", authMiddleware.checkAccessToken, authController.me);
 
-router.post(
-    "/create-manager",
-    authMiddleware.checkAccessToken,
-    authMiddleware.IsUserAdmin,
-    authController.createManager,
-);
-
 export const authRouter = router;

@@ -11,6 +11,11 @@ interface IConfig {
 
     JWT_RECOVERY_SECRET: string;
     JWT_RECOVERY_LIFETIME: any;
+
+    EMAIL_USER: string;
+    EMAIL_PASSWORD: string;
+
+    FRONTEND_URL: string;
 }
 
 const config: IConfig = {
@@ -24,6 +29,9 @@ const config: IConfig = {
     JWT_ACTIVATE_LIFETIME: process.env.JWT_ACTIVATE_LIFETIME,
     JWT_RECOVERY_SECRET: process.env.JWT_RECOVERY_SECRET,
     JWT_RECOVERY_LIFETIME: process.env.JWT_RECOVERY_LIFETIME,
+    EMAIL_USER: process.env.EMAIL_USER,
+    EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
+    FRONTEND_URL: process.env.FRONTEND_URL,
 };
 
 export { config };

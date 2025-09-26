@@ -1,11 +1,9 @@
 import { StatusCodesEnum } from "../enums/status-codes.enum";
-import { UserRoleEnum } from "../enums/user.role.enum";
 import { ApiError } from "../errors/api.error";
 import { ILogin } from "../interfaces/auth.interface";
 import { ITokenPair } from "../interfaces/token.interface";
-import { IManagerCreate, IUser } from "../interfaces/user.interface";
+import { IUser } from "../interfaces/user.interface";
 import { tokenRepository } from "../repositories/token.repository";
-import { userRepository } from "../repositories/user.repository";
 import { passwordService } from "./password.service";
 import { tokenService } from "./token.service";
 import { userService } from "./user.service";
@@ -50,17 +48,6 @@ class AuthService {
         });
         await tokenRepository.create({ ...tokens, _userId: user._id });
         return { user, tokens };
-    }
-    public async isUserAdmin(role: string): Promise<void> {
-        if (role !== UserRoleEnum.ADMIN) {
-            throw new ApiError(
-                "You don’t have permission",
-                StatusCodesEnum.FORBIDDEN,
-            );
-        }
-    }
-    public async createManager(manager: IManagerCreate): Promise<IUser> {
-        return await userRepository.createManager(manager);
     }
 }
 export const authService = new AuthService();

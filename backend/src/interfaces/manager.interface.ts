@@ -6,3 +6,7 @@ export interface IManagerStats {
     disagree: number;
     dubbing: number;
 }
+export interface IManagerQuery {
+    pageSize: number;
+    page: number;
+}

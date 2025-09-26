@@ -6,7 +6,7 @@ import { IUser } from "../interfaces/user.interface";
 const userSchema = new Schema(
     {
         email: { type: String, required: true },
-        password: { type: String, required: true },
+        password: { type: String },
         firstName: { type: String, required: true },
         lastName: { type: String, required: true },
         role: {

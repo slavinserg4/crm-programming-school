@@ -12,7 +12,4 @@ export interface IUser extends IBase {
     isBanned: boolean;
     managerId?: string[];
 }
-export type IManagerCreate = Pick<
-    IUser,
-    "email" | "password" | "firstName" | "lastName"
->;
+export type IManagerCreate = Pick<IUser, "email" | "firstName" | "lastName">;
