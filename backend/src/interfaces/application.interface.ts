@@ -24,3 +24,31 @@ export interface IApplication extends IBase {
     msg: string | null;
     comments?: IComment[];
 }
+export interface IApplicationQuery {
+    page: number;
+    pageSize: number;
+
+    sort: keyof IApplication;
+    order: "asc" | "desc";
+
+    name?: string;
+    surname?: string;
+    email?: string;
+    phone?: string;
+    age?: number;
+    course?: Course;
+    course_type?: CourseType;
+    course_format?: CourseFormat;
+    status?: ApplicationStatus;
+    group?: string;
+    manager?: string;
+
+    // Додаткові фільтри
+    myApplications?: boolean; // Для фільтрації заявок конкретного менеджера
+    startDate?: string; // Для фільтрації по даті створення
+    endDate?: string;
+    minSum?: number; // Для фільтрації по сумі
+    maxSum?: number;
+    minPaid?: number; // Для фільтрації по вже оплаченій сумі
+    maxPaid?: number;
+}
