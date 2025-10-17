@@ -43,12 +43,11 @@ export interface IApplicationQuery {
     group?: string;
     manager?: string;
 
-    // Додаткові фільтри
-    myApplications?: boolean; // Для фільтрації заявок конкретного менеджера
-    startDate?: string; // Для фільтрації по даті створення
+    myApplications?: boolean;
+    startDate?: string;
     endDate?: string;
-    minSum?: number; // Для фільтрації по сумі
+    minSum?: number;
     maxSum?: number;
-    minPaid?: number; // Для фільтрації по вже оплаченій сумі
+    minPaid?: number;
     maxPaid?: number;
 }
