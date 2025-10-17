@@ -19,7 +19,7 @@ const applicationSchema = new Schema(
         status: { type: String, required: true, enum: ApplicationStatus },
         sum: { type: Number },
         already_paid: { type: Number, required: true },
-        group: { type: String },
+        group: { type: Schema.Types.ObjectId, ref: "Group" },
         manager: {
             type: Schema.Types.ObjectId,
             ref: "User",

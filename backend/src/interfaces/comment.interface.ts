@@ -6,3 +6,8 @@ export interface IComment extends IBase {
     text: string;
     author: string;
 }
+export interface ICommentCreate {
+    applicationId: string;
+    text: string;
+    author: string;
+}

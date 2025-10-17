@@ -4,6 +4,7 @@ import { ApplicationStatus } from "../enums/application-status-enum";
 import {
     IApplication,
     IApplicationQuery,
+    IApplicationUpdate,
 } from "../interfaces/application.interface";
 import { Application } from "../models/application.model";
 
@@ -87,7 +88,7 @@ class ApplicationRepository {
 
     public updateOne(
         id: string,
-        data: Partial<IApplication>,
+        data: IApplicationUpdate,
     ): Promise<IApplication> {
         return Application.findByIdAndUpdate(id, { $set: data }, { new: true })
             .populate("manager", "name surname email")

@@ -35,7 +35,7 @@ class ManagerService {
             data,
         };
     }
-    public async activateRequest(id: string): Promise<void> {
+    public async activateRequest(id: string): Promise<string> {
         const manager = await userRepository.getUserById(id);
         if (!manager) {
             throw new Error("Manager not found");
@@ -50,6 +50,7 @@ class ManagerService {
             emailConstants[EmailEnum.ACTIVATE],
             { url, name: manager.firstName },
         );
+        return url;
     }
     public async activate(token: string): Promise<IUser> {
         const { userId } = tokenService.verifyToken(
@@ -60,7 +61,7 @@ class ManagerService {
             isActive: true,
         });
     }
-    public async passwordRecoveryRequest(id: string): Promise<void> {
+    public async passwordRecoveryRequest(id: string): Promise<string> {
         const manager = await userRepository.getUserById(id);
         if (!manager) {
             throw new Error("Manager not found");
@@ -75,6 +76,7 @@ class ManagerService {
             emailConstants[EmailEnum.RECOVERY],
             { url },
         );
+        return url;
     }
     public async recovery(
         token: string,

@@ -11,5 +11,6 @@ export interface IUser extends IBase {
     isActive: boolean;
     isBanned: boolean;
     managerId?: string[];
+    applications?: string[];
 }
 export type IManagerCreate = Pick<IUser, "email" | "firstName" | "lastName">;

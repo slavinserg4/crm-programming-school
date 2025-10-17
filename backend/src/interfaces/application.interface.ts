@@ -4,6 +4,7 @@ import { CourseFormat } from "../enums/course-format.enum";
 import { CourseType } from "../enums/course-type.enum";
 import { IBase } from "./base.interface";
 import { IComment } from "./comment.interface";
+import { IGroup } from "./group.interface";
 
 export interface IApplication extends IBase {
     _id: number;
@@ -18,7 +19,7 @@ export interface IApplication extends IBase {
     status: ApplicationStatus;
     sum: number | null;
     already_paid: number | null;
-    group?: string | null;
+    group: IGroup;
     manager?: string | null;
     utm: string;
     msg: string | null;
@@ -50,4 +51,19 @@ export interface IApplicationQuery {
     maxSum?: number;
     minPaid?: number;
     maxPaid?: number;
+}
+export interface IApplicationUpdate {
+    name?: string;
+    surname?: string;
+    email?: string;
+    phone?: string;
+    age?: number;
+    status?: ApplicationStatus;
+    group?: string;
+    sum?: number;
+    already_paid?: number;
+    course?: Course;
+    course_type?: CourseType;
+    course_format?: CourseFormat;
+    comments?: string[];
 }

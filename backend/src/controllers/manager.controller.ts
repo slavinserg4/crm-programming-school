@@ -45,9 +45,10 @@ class ManagerController {
     ) {
         try {
             const { id } = req.params;
-            await managerService.activateRequest(id);
+            const url = await managerService.activateRequest(id);
             res.status(StatusCodesEnum.OK).json({
-                message: "Check manager's email",
+                message: "Check manager's email or give him a link",
+                url,
             });
         } catch (e) {
             next(e);
@@ -69,9 +70,10 @@ class ManagerController {
     ) {
         try {
             const { id } = req.params;
-            await managerService.passwordRecoveryRequest(id);
+            const url = await managerService.passwordRecoveryRequest(id);
             res.status(StatusCodesEnum.OK).json({
-                message: "Check manager's email",
+                message: "Check manager's email or give him a link",
+                url,
             });
         } catch (e) {
             next(e);
