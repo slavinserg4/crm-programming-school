@@ -9,9 +9,7 @@ import {
 import { Application } from "../models/application.model";
 
 class ApplicationRepository {
-    public getAll(
-        query: IApplicationQuery,
-    ): Promise<[Applications: IApplication[], number]> {
+    public getAll(query: IApplicationQuery): Promise<[IApplication[], number]> {
         const {
             page = 1,
             pageSize = 25,
@@ -71,7 +69,7 @@ class ApplicationRepository {
 
         return Promise.all([
             Application.find(filterQuery)
-                .populate("manager", "name surname email")
+                .populate("manager", "firstName email")
                 .populate("comments")
                 .sort({ [sort]: order === "asc" ? 1 : -1 })
                 .skip(skip)
@@ -89,9 +87,14 @@ class ApplicationRepository {
     public updateOne(
         id: string,
         data: IApplicationUpdate,
+        userId: string,
     ): Promise<IApplication> {
-        return Application.findByIdAndUpdate(id, { $set: data }, { new: true })
-            .populate("manager", "name surname email")
+        return Application.findByIdAndUpdate(
+            id,
+            { $set: data, manager: userId },
+            { new: true },
+        )
+            .populate("manager", "firstName email")
             .populate("comments");
     }
 

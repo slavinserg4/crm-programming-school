@@ -12,13 +12,20 @@ import { userRepository } from "../repositories/user.repository";
 import { emailService } from "./email.service";
 import { passwordService } from "./password.service";
 import { tokenService } from "./token.service";
+import { userService } from "./user.service";
 
 class ManagerService {
     public async createManager(
         manager: IManagerCreate,
         userId: string,
     ): Promise<IUser> {
-        return await userRepository.createManager(manager, userId);
+        await userService.isEmailUnique(manager.email);
+        const password = await passwordService.hashPassword(manager.password);
+        console.log(password);
+        return await userRepository.createManager(
+            { ...manager, password },
+            userId,
+        );
     }
     public async getAdminManagers(
         query: IManagerQuery,
@@ -40,6 +47,7 @@ class ManagerService {
         if (!manager) {
             throw new Error("Manager not found");
         }
+        console.log(manager);
         const token = tokenService.generateActionToken(
             { userId: manager._id, role: manager.role },
             ActionTokenTypeEnum.ACTIVATE,

@@ -13,28 +13,44 @@ const applicationSchema = new Schema(
         email: { type: String, required: true },
         phone: { type: String, required: true },
         age: { type: Number, required: true },
-        course: { type: String, required: true, enum: Course },
-        course_type: { type: String, required: true, enum: CourseType },
-        course_format: { type: String, required: true, enum: CourseFormat },
-        status: { type: String, required: true, enum: ApplicationStatus },
-        sum: { type: Number },
-        already_paid: { type: Number, required: true },
-        group: { type: Schema.Types.ObjectId, ref: "Group" },
+        course: { type: String, required: true, enum: Object.values(Course) },
+        course_type: {
+            type: String,
+            required: true,
+            enum: Object.values(CourseType),
+        },
+        course_format: {
+            type: String,
+            required: true,
+            enum: Object.values(CourseFormat),
+        },
+        status: {
+            type: String,
+            required: true,
+            enum: Object.values(ApplicationStatus),
+        },
+        sum: { type: Number, default: null },
+        already_paid: { type: Number, default: null },
+
+        group: { type: Schema.Types.ObjectId, ref: "Group", default: null },
         manager: {
             type: Schema.Types.ObjectId,
             ref: "User",
-            required: true,
+            default: null,
         },
-        utm: { type: String, required: true },
-        msg: { type: String },
         comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
+
+        utm: { type: String },
+        msg: { type: String, default: null },
     },
     {
         versionKey: false,
         timestamps: true,
     },
 );
+
 export const Application = model<IApplication>(
     "Application",
     applicationSchema,
+    "application",
 );

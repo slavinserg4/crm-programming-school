@@ -19,7 +19,7 @@ class AuthService {
                 StatusCodesEnum.UNAUTHORIZED,
             );
         }
-
+        console.log(user, " ", dto.password);
         const isValidPassword = await passwordService.comparePassword(
             dto.password,
             user.password,

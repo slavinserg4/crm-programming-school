@@ -5,9 +5,10 @@ import { CourseType } from "../enums/course-type.enum";
 import { IBase } from "./base.interface";
 import { IComment } from "./comment.interface";
 import { IGroup } from "./group.interface";
+import { IUser } from "./user.interface";
 
 export interface IApplication extends IBase {
-    _id: number;
+    _id: string;
     name: string;
     surname: string;
     email: string;
@@ -19,12 +20,15 @@ export interface IApplication extends IBase {
     status: ApplicationStatus;
     sum: number | null;
     already_paid: number | null;
-    group: IGroup;
-    manager?: string | null;
-    utm: string;
+
+    group: IGroup | null;
+    manager: IUser | null;
+    comments?: IComment[] | string[];
+
+    utm?: string;
     msg: string | null;
-    comments?: IComment[];
 }
+
 export interface IApplicationQuery {
     page: number;
     pageSize: number;

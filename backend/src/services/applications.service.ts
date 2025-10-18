@@ -8,8 +8,16 @@ import {
 import { IPaginatedResponse } from "../interfaces/paginated-response.interface";
 import { applicationRepository } from "../repositories/application.repository";
 import { commentRepository } from "../repositories/comment.repository";
+import { userRepository } from "../repositories/user.repository";
 
 class ApplicationsService {
+    private normalizeId(id: any): string {
+        if (!id) return null;
+        if (typeof id === "string") return id;
+        if (typeof id.toString === "function") return id.toString();
+        return id;
+    }
+
     public async getAll(
         query: IApplicationQuery,
     ): Promise<IPaginatedResponse<IApplication>> {
@@ -40,31 +48,49 @@ class ApplicationsService {
         dto: IApplicationUpdate,
     ): Promise<IApplication> {
         const application = await this.getById(id);
-        if (application.manager.toString() !== userId.toString())
+
+        const applicationManagerId = application.manager
+            ? this.normalizeId(application.manager._id)
+            : null;
+
+        if (application.manager !== null && applicationManagerId !== userId) {
             throw new ApiError(
                 "You can only update your own applications",
                 StatusCodesEnum.FORBIDDEN,
             );
+        }
 
-        return await applicationRepository.updateOne(id, dto);
+        await userRepository.addApplicationToUser(userId, application._id);
+        return await applicationRepository.updateOne(id, dto, userId);
     }
+
     public async addComment(
         id: string,
-        text: string,
         managerId: string,
+        text: string,
     ): Promise<IApplication> {
         const application = await this.getById(id);
-        if (application.manager.toString() !== managerId.toString())
+
+        const applicationManagerId = application.manager
+            ? this.normalizeId(application.manager._id)
+            : null;
+
+        if (
+            application.manager !== null &&
+            applicationManagerId !== managerId
+        ) {
             throw new ApiError(
                 "You can only update your own applications",
                 StatusCodesEnum.FORBIDDEN,
             );
+        }
+
         const newComment = await commentRepository.create({
             applicationId: id,
             text,
             author: managerId,
         });
-
+        await userRepository.addApplicationToUser(managerId, application._id);
         return await applicationRepository.addComment(
             id,
             newComment._id.toString(),

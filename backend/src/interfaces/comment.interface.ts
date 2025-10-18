@@ -1,8 +1,9 @@
+import { IApplication } from "./application.interface";
 import { IBase } from "./base.interface";
 
 export interface IComment extends IBase {
-    _id: number;
-    applicationId: number;
+    _id: string;
+    applicationId: IApplication | string;
     text: string;
     author: string;
 }

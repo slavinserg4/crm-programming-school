@@ -4,6 +4,7 @@ import { StatusCodesEnum } from "../enums/status-codes.enum";
 import { IPasswordReset } from "../interfaces/auth.interface";
 import { IManagerQuery } from "../interfaces/manager.interface";
 import { ITokenPayload } from "../interfaces/token.interface";
+import { IManagerCreate } from "../interfaces/user.interface";
 import { managerService } from "../services/manager.service";
 
 class ManagerController {
@@ -13,7 +14,7 @@ class ManagerController {
         next: NextFunction,
     ) {
         try {
-            const manager = req.body;
+            const manager = req.body as IManagerCreate;
             const { userId } = req.res.locals.tokenPayload as ITokenPayload;
             const createdManager = await managerService.createManager(
                 manager,
