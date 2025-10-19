@@ -48,13 +48,8 @@ export interface IApplicationQuery {
     group?: string;
     manager?: string;
 
-    myApplications?: boolean;
     startDate?: string;
     endDate?: string;
-    minSum?: number;
-    maxSum?: number;
-    minPaid?: number;
-    maxPaid?: number;
 }
 export interface IApplicationUpdate {
     name?: string;

@@ -1,3 +1,4 @@
+import { ApplicationStatus } from "../enums/application-status-enum";
 import { StatusCodesEnum } from "../enums/status-codes.enum";
 import { ApiError } from "../errors/api.error";
 import {
@@ -61,13 +62,17 @@ class ApplicationsService {
         }
 
         await userRepository.addApplicationToUser(userId, application._id);
-        return await applicationRepository.updateOne(id, dto, userId);
+        return await applicationRepository.updateOne(
+            id,
+            { ...dto, status: ApplicationStatus.IN_WORK },
+            userId,
+        );
     }
 
     public async addComment(
         id: string,
-        managerId: string,
         text: string,
+        managerId: string,
     ): Promise<IApplication> {
         const application = await this.getById(id);
 

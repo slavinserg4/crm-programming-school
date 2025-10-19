@@ -58,7 +58,12 @@ class ManagerController {
     public async activate(req: Request, res: Response, next: NextFunction) {
         try {
             const { token } = req.params;
-            const manager = await managerService.activate(token);
+            const { firstPassword, secondPassword } =
+                req.body as IPasswordReset;
+            const manager = await managerService.activate(token, {
+                firstPassword,
+                secondPassword,
+            });
             res.status(StatusCodesEnum.OK).json(manager);
         } catch (e) {
             next(e);

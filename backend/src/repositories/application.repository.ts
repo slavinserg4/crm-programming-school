@@ -7,37 +7,57 @@ import {
     IApplicationUpdate,
 } from "../interfaces/application.interface";
 import { Application } from "../models/application.model";
+import { User } from "../models/user.model";
 
 class ApplicationRepository {
-    public getAll(query: IApplicationQuery): Promise<[IApplication[], number]> {
+    public async getAll(
+        query: IApplicationQuery,
+    ): Promise<[IApplication[], number]> {
         const {
             page = 1,
             pageSize = 25,
             sort = "createdAt",
             order = "desc",
-            myApplications,
+            name,
+            surname,
+            email,
+            phone,
+            age,
+            course,
+            course_type,
+            course_format,
+            status,
+            group,
             manager,
             startDate,
             endDate,
-            minSum,
-            maxSum,
-            minPaid,
-            maxPaid,
-            ...filters
         } = query;
 
         const filterQuery: any = {};
 
-        // Базова фільтрація тексту
-        Object.keys(filters).forEach((key) => {
-            if (filters[key]) {
-                if (["name", "surname", "email", "phone"].includes(key)) {
-                    filterQuery[key] = { $regex: filters[key], $options: "i" };
-                } else {
-                    filterQuery[key] = filters[key];
-                }
-            }
-        });
+        // Текстовий пошук
+        if (name) filterQuery.name = { $regex: name, $options: "i" };
+        if (surname) filterQuery.surname = { $regex: surname, $options: "i" };
+        if (email) filterQuery.email = { $regex: email, $options: "i" };
+        if (phone) filterQuery.phone = { $regex: phone, $options: "i" };
+
+        // Пошук по менеджеру
+        if (manager) {
+            const managerFilter = {
+                firstName: { $regex: manager, $options: "i" },
+            };
+            const managers = await User.find(managerFilter);
+            const managerIds = managers.map((m) => m._id);
+            filterQuery.manager = { $in: managerIds };
+        }
+
+        // Інші фільтри залишаються без змін
+        if (age) filterQuery.age = age;
+        if (course) filterQuery.course = course;
+        if (course_type) filterQuery.course_type = course_type;
+        if (course_format) filterQuery.course_format = course_format;
+        if (status) filterQuery.status = status;
+        if (group) filterQuery.group = new Types.ObjectId(group);
 
         // Фільтрація по датах
         if (startDate || endDate) {
@@ -46,28 +66,9 @@ class ApplicationRepository {
             if (endDate) filterQuery.createdAt.$lte = new Date(endDate);
         }
 
-        // Фільтрація по сумах
-        if (minSum || maxSum) {
-            filterQuery.sum = {};
-            if (minSum) filterQuery.sum.$gte = minSum;
-            if (maxSum) filterQuery.sum.$lte = maxSum;
-        }
-
-        // Фільтрація по вже оплаченим сумам
-        if (minPaid || maxPaid) {
-            filterQuery.already_paid = {};
-            if (minPaid) filterQuery.already_paid.$gte = minPaid;
-            if (maxPaid) filterQuery.already_paid.$lte = maxPaid;
-        }
-
-        // Фільтрація власних заявок менеджера
-        if (myApplications && manager) {
-            filterQuery.manager = new Types.ObjectId(manager);
-        }
-
         const skip = (page - 1) * pageSize;
 
-        return Promise.all([
+        return await Promise.all([
             Application.find(filterQuery)
                 .populate("manager", "firstName email")
                 .populate("comments")
@@ -113,7 +114,9 @@ class ApplicationRepository {
                 },
             },
             { new: true },
-        ).populate("manager comments");
+        )
+            .populate("manager", "firstName email _id")
+            .populate("comments");
     }
 }
 

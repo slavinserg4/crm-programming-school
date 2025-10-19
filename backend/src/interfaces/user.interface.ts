@@ -13,7 +13,4 @@ export interface IUser extends IBase {
     managerId?: string[];
     applications?: string[];
 }
-export type IManagerCreate = Pick<
-    IUser,
-    "email" | "firstName" | "lastName" | "password"
->;
+export type IManagerCreate = Pick<IUser, "email" | "firstName" | "lastName">;

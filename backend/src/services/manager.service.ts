@@ -20,12 +20,7 @@ class ManagerService {
         userId: string,
     ): Promise<IUser> {
         await userService.isEmailUnique(manager.email);
-        const password = await passwordService.hashPassword(manager.password);
-        console.log(password);
-        return await userRepository.createManager(
-            { ...manager, password },
-            userId,
-        );
+        return await userRepository.createManager(manager, userId);
     }
     public async getAdminManagers(
         query: IManagerQuery,
@@ -47,7 +42,6 @@ class ManagerService {
         if (!manager) {
             throw new Error("Manager not found");
         }
-        console.log(manager);
         const token = tokenService.generateActionToken(
             { userId: manager._id, role: manager.role },
             ActionTokenTypeEnum.ACTIVATE,
@@ -60,13 +54,26 @@ class ManagerService {
         );
         return url;
     }
-    public async activate(token: string): Promise<IUser> {
+    public async activate(
+        token: string,
+        passwords: IPasswordReset,
+    ): Promise<IUser> {
         const { userId } = tokenService.verifyToken(
             token,
             ActionTokenTypeEnum.ACTIVATE,
         );
+        if (passwords.firstPassword !== passwords.secondPassword) {
+            throw new ApiError(
+                "Passwords do not match",
+                StatusCodesEnum.BED_REQUEST,
+            );
+        }
+        const password = await passwordService.hashPassword(
+            passwords.secondPassword,
+        );
         return await userRepository.updateById(userId, {
             isActive: true,
+            password,
         });
     }
     public async passwordRecoveryRequest(id: string): Promise<string> {

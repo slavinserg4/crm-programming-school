@@ -30,32 +30,10 @@ class UserRepository {
         return User.findByIdAndUpdate(
             userId,
             {
-                $push: { applications: applicationId },
+                $addToSet: { applications: applicationId },
             },
             { new: true },
         );
-    }
-    public getMyApplications(userId: string): Promise<IUser> {
-        return User.findById(userId)
-            .populate([
-                {
-                    path: "applications",
-                    select: "name surname email phone age course course_type course_format status sum already_paid utm msg createdAt updatedAt",
-                    populate: [
-                        {
-                            path: "manager",
-                            select: "firstName lastName email role isActive",
-                        },
-                        {
-                            path: "comments",
-                        },
-                        {
-                            path: "group",
-                        },
-                    ],
-                },
-            ])
-            .select("-password");
     }
     public async getAll(
         query: IManagerQuery,
