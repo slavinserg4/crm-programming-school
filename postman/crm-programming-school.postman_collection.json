@@ -1,0 +1,683 @@
+{
+	"info": {
+		"_postman_id": "b0a83edf-0355-4b1e-8475-70b7c701c0bf",
+		"name": "crm-programming-school",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "48537549",
+		"_collection_link": "https://maybe-yt08-3589131.postman.co/workspace/%25D0%259F%25D0%25B0%25D1%2588%25D0%25B0-%25D0%2592%25D0%25B0%25D0%25BD%25D0%25B4%25D0%25B0%25D0%25BB's-Workspace~7b790817-9fe5-4852-82b3-96e092f72529/collection/48537549-b0a83edf-0355-4b1e-8475-70b7c701c0bf?action=share&source=collection_link&creator=48537549"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Sing-in",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();\r",
+									"pm.environment.set(\"accessToken\", res.tokens.accessToken);\r",
+									"pm.environment.set(\"refreshToken\", res.tokens.refreshToken);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "admin@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "text"
+								},
+								{
+									"key": "firstName",
+									"value": "admin",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "lastName",
+									"value": "admin",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/sign-in",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"sign-in"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "me",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/auth/me",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();\r",
+									"pm.environment.set(\"accessToken\", res.tokens.accessToken);\r",
+									"pm.environment.set(\"refreshToken\", res.tokens.refreshToken);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "refreshToken",
+									"value": "{{refreshToken}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/refresh",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Manager",
+			"item": [
+				{
+					"name": "create-manager",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "firstName",
+									"value": "salam",
+									"type": "text"
+								},
+								{
+									"key": "lastName",
+									"value": "salamych",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "as1111111111asd@gmail.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/manager/create",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"manager",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Admin managers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/manager/admins?pageSize=51&page=1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"manager",
+								"admins"
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "51"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "activate Request",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "firstName",
+									"value": "ahaha",
+									"type": "text"
+								},
+								{
+									"key": "lastName",
+									"value": "debil",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "1234123",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "123453346",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/manager/activate-request/68f49f78d5589e710513c796",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"manager",
+								"activate-request",
+								"68f49f78d5589e710513c796"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Activate",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "firstPassword",
+									"value": "1111111111",
+									"type": "text"
+								},
+								{
+									"key": "secondPassword",
+									"value": "1111111111",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/manager/activate/:token",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"manager",
+								"activate",
+								":token"
+							],
+							"variable": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGY0OWY3OGQ1NTg5ZTcxMDUxM2M3OTYiLCJyb2xlIjoibWFuYWdlciIsImlhdCI6MTc2MDg2MjA4NywiZXhwIjoxNzYwODY1Njg3fQ.LUCHSlJdRqFjRa7xxjDSiyJr-FcBwlj_FZ2r9_4kZnY"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recovery Password Request",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/manager/recovery-request/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"manager",
+								"recovery-request",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "68d692e23b196c222a5e3781"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recovery with new passwords",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "firstPassword",
+									"value": "1111111111",
+									"type": "text"
+								},
+								{
+									"key": "secondPassword",
+									"value": "1111111111",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/manager/recovery/:token",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"manager",
+								"recovery",
+								":token"
+							],
+							"variable": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGQ2OTJlMjNiMTk2YzIyMmE1ZTM3ODEiLCJyb2xlIjoibWFuYWdlciIsImlhdCI6MTc2MDM1MzkwMiwiZXhwIjoxNzYwMzU0NTAyfQ.5RJ0hJ7tP8faPa_JrhygIO5liqLpomR36nj4b04N544"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ban manager",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "admin@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "text"
+								},
+								{
+									"key": "firstName",
+									"value": "admin",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "lastName",
+									"value": "admin",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/manager/ban/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"manager",
+								"ban",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "68d6826855554e19547a4f8a"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "unban manager",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/manager/unban/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"manager",
+								"unban",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "68d6826855554e19547a4f8a"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "applications",
+			"item": [
+				{
+					"name": "getAll",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/applications?page=1&pageSize=25",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"applications"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "25"
+								},
+								{
+									"key": "name",
+									"value": "Микола",
+									"disabled": true
+								},
+								{
+									"key": "surname",
+									"value": "хачико",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "dishman.edwar",
+									"disabled": true
+								},
+								{
+									"key": "phone",
+									"value": "380678741298",
+									"disabled": true
+								},
+								{
+									"key": "age",
+									"value": "24",
+									"disabled": true
+								},
+								{
+									"key": "course",
+									"value": "PCX",
+									"disabled": true
+								},
+								{
+									"key": "course_type",
+									"value": "premium",
+									"disabled": true
+								},
+								{
+									"key": "course_format",
+									"value": "online",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "In work",
+									"disabled": true
+								},
+								{
+									"key": "manager",
+									"value": "admin",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "email",
+									"disabled": true
+								},
+								{
+									"key": "order",
+									"value": "desc",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "edit Applicatoin",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/applications/update/68ece6d760af3b72dcce5f59",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"applications",
+								"update",
+								"68ece6d760af3b72dcce5f59"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add comment",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/applications/addcomm/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"applications",
+								"addcomm",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "68f49f78d5589e710513c796"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
