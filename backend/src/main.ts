@@ -1,8 +1,9 @@
 /* eslint-disable no-console */
 import express, { NextFunction, Request, Response } from "express";
-import mongoose from "mongoose";
 
+// import mongoose from "mongoose";
 import { config } from "./config/config";
+import { swaggerConfig, swaggerUI } from "./config/swagger.config";
 import { cronRunner } from "./crons";
 import { ApiError } from "./errors/api.error";
 import { apiRouter } from "./routers/api.router";
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/", apiRouter);
+app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerConfig));
 
 app.use((err: ApiError, req: Request, res: Response, next: NextFunction) => {
     const status = err.status || 500;
@@ -23,27 +25,28 @@ process.on("uncaughtException", (err) => {
     console.log("uncaughtException", err);
     process.exit(1);
 });
-const dbConnection = async () => {
-    let dbCon = false;
-
-    while (!dbCon) {
-        try {
-            console.log("Connecting to DB...");
-            await mongoose.connect(config.MONGO_URI);
-            dbCon = true;
-            console.log("Database available!!!");
-        } catch {
-            console.log("Database unavailable, wait 3 seconds");
-            await new Promise((resolve) => setTimeout(resolve, 3000));
-        }
-    }
-};
+// const dbConnection = async () => {
+//     let dbCon = false;
+//
+//     while (!dbCon) {
+//         try {
+//             console.log("Connecting to DB...");
+//             await mongoose.connect(config.MONGO_URI);
+//             dbCon = true;
+//             console.log("Database available!!!");
+//         } catch {
+//             console.log("Database unavailable, wait 3 seconds");
+//             await new Promise((resolve) => setTimeout(resolve, 3000));
+//         }
+//     }
+// };
 
 const start = async () => {
     try {
-        await dbConnection();
-        app.listen(config.PORT, async () => {
-            console.log(`Server listening on ${config.PORT}`);
+        console.log(config.PORT);
+        // await dbConnection();
+        app.listen(5333, async () => {
+            console.log(`Server listening on ${5333}`);
         });
         await cronRunner();
     } catch (e) {

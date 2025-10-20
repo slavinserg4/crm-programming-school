@@ -64,5 +64,4 @@ export interface IApplicationUpdate {
     course?: Course;
     course_type?: CourseType;
     course_format?: CourseFormat;
-    comments?: string[];
 }

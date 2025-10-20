@@ -32,7 +32,7 @@ class ApplicationController {
         try {
             const { id } = req.params;
             const { userId } = res.locals.tokenPayload as ITokenPayload;
-            const updateData: IApplicationUpdate = req.body;
+            const updateData = req.body as IApplicationUpdate;
 
             const updated = await applicationsService.updateOne(
                 id,
