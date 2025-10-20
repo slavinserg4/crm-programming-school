@@ -39,7 +39,10 @@ for it you need to remove env.db and in the file docker.compose delete db, and r
 Create `.env` file in the project root:
 ```
 PORT=
-MONGO_URI=
+MONGO_URI=mongodb+srv://user:user@cluster0.vsvnxyt.mongodb.net/ 
+its a cloud db
+
+
 
 JWT_ACCESS_SECRET=
 JWT_ACCESS_LIFETIME=
