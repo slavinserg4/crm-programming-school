@@ -6,6 +6,7 @@ import {
     IApplicationQuery,
     IApplicationUpdate,
 } from "../interfaces/application.interface";
+import { IManagerStats } from "../interfaces/manager.interface";
 import { IPaginatedResponse } from "../interfaces/paginated-response.interface";
 import { applicationRepository } from "../repositories/application.repository";
 import { commentRepository } from "../repositories/comment.repository";
@@ -101,6 +102,9 @@ class ApplicationsService {
             newComment._id.toString(),
             managerId,
         );
+    }
+    public async getApplicationsStatistics(): Promise<IManagerStats> {
+        return await applicationRepository.getApplicationsStatistics();
     }
 }
 export const applicationsService = new ApplicationsService();

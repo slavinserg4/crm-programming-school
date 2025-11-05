@@ -6,6 +6,7 @@ import {
     IApplicationQuery,
     IApplicationUpdate,
 } from "../interfaces/application.interface";
+import { IManagerStats } from "../interfaces/manager.interface";
 import { Application } from "../models/application.model";
 import { User } from "../models/user.model";
 
@@ -35,13 +36,11 @@ class ApplicationRepository {
 
         const filterQuery: any = {};
 
-        // Текстовий пошук
         if (name) filterQuery.name = { $regex: name, $options: "i" };
         if (surname) filterQuery.surname = { $regex: surname, $options: "i" };
         if (email) filterQuery.email = { $regex: email, $options: "i" };
         if (phone) filterQuery.phone = { $regex: phone, $options: "i" };
 
-        // Пошук по менеджеру
         if (manager) {
             const managerFilter = {
                 firstName: { $regex: manager, $options: "i" },
@@ -51,7 +50,6 @@ class ApplicationRepository {
             filterQuery.manager = { $in: managerIds };
         }
 
-        // Інші фільтри залишаються без змін
         if (age) filterQuery.age = age;
         if (course) filterQuery.course = course;
         if (course_type) filterQuery.course_type = course_type;
@@ -59,7 +57,6 @@ class ApplicationRepository {
         if (status) filterQuery.status = status;
         if (group) filterQuery.group = new Types.ObjectId(group);
 
-        // Фільтрація по датах
         if (startDate || endDate) {
             filterQuery.createdAt = {};
             if (startDate) filterQuery.createdAt.$gte = new Date(startDate);
@@ -117,6 +114,50 @@ class ApplicationRepository {
         )
             .populate("manager", "firstName email _id")
             .populate("comments");
+    }
+    public async getApplicationsStatistics(): Promise<IManagerStats> {
+        const pipeline = [
+            {
+                $group: {
+                    _id: "$status",
+                    count: { $sum: 1 },
+                },
+            },
+        ];
+
+        const results = await Application.aggregate(pipeline);
+
+        const statistics: IManagerStats = {
+            total: 0,
+            inWork: 0,
+            new: 0,
+            agree: 0,
+            disagree: 0,
+            dubbing: 0,
+        };
+
+        results.forEach(({ _id, count }) => {
+            switch (_id) {
+                case "In work":
+                    statistics.inWork = count;
+                    break;
+                case "New":
+                    statistics.new = count;
+                    break;
+                case "Agree":
+                    statistics.agree = count;
+                    break;
+                case "Disagree":
+                    statistics.disagree = count;
+                    break;
+                case "Dubbing":
+                    statistics.dubbing = count;
+                    break;
+            }
+            statistics.total += count;
+        });
+
+        return statistics;
     }
 }
 

@@ -6,7 +6,11 @@ import { commonMiddleware } from "../middlewares/common.middleware";
 import { ApplicationValidator } from "../validators/application.validator";
 
 const router = Router();
-
+router.get(
+    "/stats",
+    authMiddleware.checkAccessToken,
+    applicationController.getApplicationsStatistics,
+);
 router.get(
     "/",
     authMiddleware.checkAccessToken,

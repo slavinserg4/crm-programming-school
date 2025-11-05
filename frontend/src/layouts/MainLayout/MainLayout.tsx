@@ -1,10 +1,10 @@
 import { Outlet } from "react-router-dom";
+import Menu from "../../components/Menu/Menu";
 
 const MainLayout = () => {
     return (
         <div>
-            menu
-            <hr/>
+            <Menu/>
             <Outlet/>
         </div>
     );

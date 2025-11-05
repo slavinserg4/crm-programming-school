@@ -10,6 +10,19 @@ import { ITokenPayload } from "../interfaces/token.interface";
 import { applicationsService } from "../services/applications.service";
 
 class ApplicationController {
+    public async getApplicationsStatistics(
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ) {
+        try {
+            const response =
+                await applicationsService.getApplicationsStatistics();
+            res.json(response).status(StatusCodesEnum.OK);
+        } catch (e) {
+            next(e);
+        }
+    }
     public async getAll(req: Request, res: Response, next: NextFunction) {
         try {
             const query = req.query as any as IApplicationQuery;

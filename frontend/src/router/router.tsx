@@ -7,11 +7,9 @@ import OrdersPage from "../pages/OrdersPage/OrdersPage";
 import AdminPanelPage from "../pages/AdminPanelPage/AdminPanelPage";
 
 export const router = createBrowserRouter([
+    {index:true, element:<LoginPage/>},
     {
         path: "/",element:<MainLayout/>, children:[
-            {
-                index:true, element:<LoginPage/>
-            },
             {
                 path:"orders", element:<OrdersPage/>
             },
@@ -25,5 +23,6 @@ export const router = createBrowserRouter([
                 path:"adminPanel", element:<AdminPanelPage/>
             }
         ]
-    }
+    },
+
 ]);
