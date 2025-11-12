@@ -1,10 +1,9 @@
 {
 	"info": {
-		"_postman_id": "b0a83edf-0355-4b1e-8475-70b7c701c0bf",
+		"_postman_id": "f6636a22-51b1-4a04-b1a4-2928eda384c2",
 		"name": "crm-programming-school",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "48537549",
-		"_collection_link": "https://maybe-yt08-3589131.postman.co/workspace/%25D0%259F%25D0%25B0%25D1%2588%25D0%25B0-%25D0%2592%25D0%25B0%25D0%25BD%25D0%25B4%25D0%25B0%25D0%25BB's-Workspace~7b790817-9fe5-4852-82b3-96e092f72529/collection/48537549-b0a83edf-0355-4b1e-8475-70b7c701c0bf?action=share&source=collection_link&creator=48537549"
+		"_exporter_id": "39774801"
 	},
 	"item": [
 		{
@@ -99,9 +98,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseURL}}/auth/me",
+							"raw": "{{baseUrl}}/auth/me",
 							"host": [
-								"{{baseURL}}"
+								"{{baseUrl}}"
 							],
 							"path": [
 								"auth",
@@ -142,9 +141,9 @@
 							]
 						},
 						"url": {
-							"raw": "{{baseURL}}/auth/refresh",
+							"raw": "{{baseUrl}}/auth/refresh",
 							"host": [
-								"{{baseURL}}"
+								"{{baseUrl}}"
 							],
 							"path": [
 								"auth",
@@ -179,25 +178,25 @@
 							"urlencoded": [
 								{
 									"key": "firstName",
-									"value": "salam",
+									"value": "Salam",
 									"type": "text"
 								},
 								{
 									"key": "lastName",
-									"value": "salamych",
+									"value": "Dalamych",
 									"type": "text"
 								},
 								{
 									"key": "email",
-									"value": "as1111111111asd@gmail.com",
+									"value": "adsfsadf@gmail.com",
 									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "{{baseURL}}/manager/create",
+							"raw": "{{baseUrl}}/manager/create",
 							"host": [
-								"{{baseURL}}"
+								"{{baseUrl}}"
 							],
 							"path": [
 								"manager",
@@ -223,9 +222,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseURL}}/manager/admins?pageSize=51&page=1",
+							"raw": "{{baseUrl}}/manager/admins?pageSize=25&page=1",
 							"host": [
-								"{{baseURL}}"
+								"{{baseUrl}}"
 							],
 							"path": [
 								"manager",
@@ -234,7 +233,7 @@
 							"query": [
 								{
 									"key": "pageSize",
-									"value": "51"
+									"value": "25"
 								},
 								{
 									"key": "page",
@@ -286,14 +285,20 @@
 							]
 						},
 						"url": {
-							"raw": "{{baseURL}}/manager/activate-request/68f49f78d5589e710513c796",
+							"raw": "{{baseUrl}}/manager/activate-request/:id",
 							"host": [
-								"{{baseURL}}"
+								"{{baseUrl}}"
 							],
 							"path": [
 								"manager",
 								"activate-request",
-								"68f49f78d5589e710513c796"
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "69109fb9033b927a821338cb"
+								}
 							]
 						}
 					},
@@ -319,20 +324,20 @@
 							"urlencoded": [
 								{
 									"key": "firstPassword",
-									"value": "1111111111",
+									"value": "P@$$w0rd1",
 									"type": "text"
 								},
 								{
 									"key": "secondPassword",
-									"value": "1111111111",
+									"value": "P@$$w0rd1",
 									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "{{baseURL}}/manager/activate/:token",
+							"raw": "{{baseUrl}}/manager/activate/:token",
 							"host": [
-								"{{baseURL}}"
+								"{{baseUrl}}"
 							],
 							"path": [
 								"manager",
@@ -342,7 +347,7 @@
 							"variable": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGY0OWY3OGQ1NTg5ZTcxMDUxM2M3OTYiLCJyb2xlIjoibWFuYWdlciIsImlhdCI6MTc2MDg2MjA4NywiZXhwIjoxNzYwODY1Njg3fQ.LUCHSlJdRqFjRa7xxjDSiyJr-FcBwlj_FZ2r9_4kZnY"
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTEwOWZiOTAzM2I5MjdhODIxMzM4Y2IiLCJyb2xlIjoibWFuYWdlciIsImlhdCI6MTc2MjY5NzE1OCwiZXhwIjoxNzYyNzAwNzU4fQ.0QhmAlpgB5DLAe7liRU30FUen3wJRpsGWteQSEXeuk0"
 								}
 							]
 						}
@@ -365,9 +370,9 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "{{baseURL}}/manager/recovery-request/:id",
+							"raw": "{{baseUrl}}/manager/recovery-request/:id",
 							"host": [
-								"{{baseURL}}"
+								"{{baseUrl}}"
 							],
 							"path": [
 								"manager",
@@ -377,7 +382,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "68d692e23b196c222a5e3781"
+									"value": "69062340636a39b53ff4b8e6"
 								}
 							]
 						}
@@ -394,20 +399,20 @@
 							"urlencoded": [
 								{
 									"key": "firstPassword",
-									"value": "1111111111",
+									"value": "P@$$w0rd",
 									"type": "text"
 								},
 								{
 									"key": "secondPassword",
-									"value": "1111111111",
+									"value": "P@$$w0rd",
 									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "{{baseURL}}/manager/recovery/:token",
+							"raw": "{{baseUrl}}/manager/recovery/:token",
 							"host": [
-								"{{baseURL}}"
+								"{{baseUrl}}"
 							],
 							"path": [
 								"manager",
@@ -417,7 +422,7 @@
 							"variable": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OGQ2OTJlMjNiMTk2YzIyMmE1ZTM3ODEiLCJyb2xlIjoibWFuYWdlciIsImlhdCI6MTc2MDM1MzkwMiwiZXhwIjoxNzYwMzU0NTAyfQ.5RJ0hJ7tP8faPa_JrhygIO5liqLpomR36nj4b04N544"
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTA2MjM0MDYzNmEzOWI1M2ZmNGI4ZTYiLCJyb2xlIjoibWFuYWdlciIsImlhdCI6MTc2MjAxMDAwMiwiZXhwIjoxNzYyMDEwNjAyfQ.uT1hL85uUIGW1Cu4tX1FhvQu6qpjUs7gt_AjnDKf0FA"
 								}
 							]
 						}
@@ -441,35 +446,12 @@
 						"header": [],
 						"body": {
 							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "email",
-									"value": "admin@gmail.com",
-									"type": "text"
-								},
-								{
-									"key": "password",
-									"value": "admin",
-									"type": "text"
-								},
-								{
-									"key": "firstName",
-									"value": "admin",
-									"type": "text",
-									"disabled": true
-								},
-								{
-									"key": "lastName",
-									"value": "admin",
-									"type": "text",
-									"disabled": true
-								}
-							]
+							"urlencoded": []
 						},
 						"url": {
-							"raw": "{{baseURL}}/manager/ban/:id",
+							"raw": "{{baseUrl}}/manager/ban/:id",
 							"host": [
-								"{{baseURL}}"
+								"{{baseUrl}}"
 							],
 							"path": [
 								"manager",
@@ -502,9 +484,9 @@
 						"method": "PATCH",
 						"header": [],
 						"url": {
-							"raw": "{{baseURL}}/manager/unban/:id",
+							"raw": "{{baseUrl}}/manager/unban/:id",
 							"host": [
-								"{{baseURL}}"
+								"{{baseUrl}}"
 							],
 							"path": [
 								"manager",
@@ -542,9 +524,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseURL}}/applications?page=1&pageSize=25",
+							"raw": "{{baseUrl}}/applications?page=1&pageSize=25",
 							"host": [
-								"{{baseURL}}"
+								"{{baseUrl}}"
 							],
 							"path": [
 								"applications"
@@ -638,15 +620,31 @@
 						},
 						"method": "PATCH",
 						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "213123",
+									"type": "text"
+								}
+							]
+						},
 						"url": {
-							"raw": "{{baseURL}}/applications/update/68ece6d760af3b72dcce5f59",
+							"raw": "{{baseUrl}}/applications/update/:id",
 							"host": [
-								"{{baseURL}}"
+								"{{baseUrl}}"
 							],
 							"path": [
 								"applications",
 								"update",
-								"68ece6d760af3b72dcce5f59"
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "68ece6d760af3b72dcce5f7b"
+								}
 							]
 						}
 					},
@@ -658,9 +656,9 @@
 						"method": "PATCH",
 						"header": [],
 						"url": {
-							"raw": "{{baseURL}}/applications/addcomm/:id",
+							"raw": "{{baseUrl}}/applications/addcomm/:id",
 							"host": [
-								"{{baseURL}}"
+								"{{baseUrl}}"
 							],
 							"path": [
 								"applications",
@@ -671,6 +669,186 @@
 								{
 									"key": "id",
 									"value": "68f49f78d5589e710513c796"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "stats",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/applications/stats",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"applications",
+								"stats"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Микола",
+									"disabled": true
+								},
+								{
+									"key": "surname",
+									"value": "хачико",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "dishman.edwar",
+									"disabled": true
+								},
+								{
+									"key": "phone",
+									"value": "380678741298",
+									"disabled": true
+								},
+								{
+									"key": "age",
+									"value": "24",
+									"disabled": true
+								},
+								{
+									"key": "course",
+									"value": "PCX",
+									"disabled": true
+								},
+								{
+									"key": "course_type",
+									"value": "premium",
+									"disabled": true
+								},
+								{
+									"key": "course_format",
+									"value": "online",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "In work",
+									"disabled": true
+								},
+								{
+									"key": "manager",
+									"value": "admin",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "email",
+									"disabled": true
+								},
+								{
+									"key": "order",
+									"value": "desc",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MyApplications",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/applications/my-applications",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"applications",
+								"my-applications"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Микола",
+									"disabled": true
+								},
+								{
+									"key": "surname",
+									"value": "хачико",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "dishman.edwar",
+									"disabled": true
+								},
+								{
+									"key": "phone",
+									"value": "380678741298",
+									"disabled": true
+								},
+								{
+									"key": "age",
+									"value": "24",
+									"disabled": true
+								},
+								{
+									"key": "course",
+									"value": "PCX",
+									"disabled": true
+								},
+								{
+									"key": "course_type",
+									"value": "premium",
+									"disabled": true
+								},
+								{
+									"key": "course_format",
+									"value": "online",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "In work",
+									"disabled": true
+								},
+								{
+									"key": "manager",
+									"value": "admin",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "email",
+									"disabled": true
+								},
+								{
+									"key": "order",
+									"value": "desc",
+									"disabled": true
 								}
 							]
 						}

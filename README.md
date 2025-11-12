@@ -23,7 +23,6 @@ Before running the project, make sure you have:
 
 
 ### Types of BD
-- A database dump in zip format is attached to GitHub, unzip it and use Docker according to the instructions below.
 - There is a cloud database:
 ```
 MONGO_URI=mongodb+srv://user:user@node-exam-bd.9spjjgr.mongodb.net/nodejs-exam-db?retryWrites=true&w=majority&appName=node-exam-bd
@@ -58,19 +57,23 @@ EMAIL_USER=
 EMAIL_PASSWORD=
 
 ```
-Create `.env.db` file for MongoDB:
-```
-env
-MONGO_INITDB_DATABASE=nodejs-exam-db
-MONGO_INITDB_ROOT_USERNAME=your_MONGO_INITDB_ROOT_USERNAME
-MONGO_INITDB_ROOT_PASSWORD=_your_MONGO_INITDB_ROOT_PASSWORD
-```
-4. Install all dependencies
+
+3. Install all dependencies in Backend
 ```
 cd backend/
 npm install
 ```
-3. Run with Docker Compose:
+4. Install all dependencies in Frontend
+```
+cd frontend/
+npm install
+```
+5. Build the frontend application
+```
+cd frontend/
+npm run watch
+```
+6. Run with Docker Compose:
 ```
 bash
 # Build and start containers
