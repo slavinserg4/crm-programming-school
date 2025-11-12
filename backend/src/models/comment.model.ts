@@ -6,7 +6,7 @@ const commentSchema = new Schema(
     {
         applicationId: { type: Schema.Types.ObjectId, ref: "Application" },
         text: { type: String, required: true },
-        author: { type: String, required: true },
+        author: { type: String, required: true, ref: "User" },
     },
     {
         versionKey: false,

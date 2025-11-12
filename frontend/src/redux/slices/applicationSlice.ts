@@ -1,4 +1,4 @@
-import { IApplication, IApplicationQuery, IApplicationUpdate } from "../../models/IApplicationsModel";
+import { IApplication, IApplicationQuery } from "../../models/IApplicationsModel";
 import { IStatsOfStatus } from "../../models/IManagerStats";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import apiService from "../../services/api.services";
@@ -32,6 +32,18 @@ const initialState: ApplicationState = {
     },
 };
 
+export const fetchMyApplications = createAsyncThunk(
+    'applications/fetchMyApplications',
+    async (params:IApplicationQuery, { rejectWithValue }) => {
+        try {
+            return await apiService.applications.getMyApplications(params);
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data?.message || "Помилка завантаження заявок");
+        }
+    }
+);
+
+
 export const fetchApplications = createAsyncThunk(
     'applications/fetchAll',
     async (params: IApplicationQuery, { rejectWithValue }) => {
@@ -56,7 +68,7 @@ export const fetchApplicationById = createAsyncThunk(
 
 export const updateApplication = createAsyncThunk(
     'applications/update',
-    async ({ id, data }: { id: string; data: IApplicationUpdate }, { rejectWithValue }) => {
+    async ({ id, data }: { id: string; data: Partial<IApplication> }, { rejectWithValue }) => {
         try {
             return await apiService.applications.update(id, data);
         } catch (error: any) {
@@ -100,6 +112,25 @@ export const applicationSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(fetchMyApplications.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(fetchMyApplications.fulfilled, (state, action: PayloadAction<IPaginatedResponse<IApplication>>) => {
+                state.loading = false;
+                state.applications = action.payload.data;
+                state.pagination = {
+                    totalItems: action.payload.totalItems,
+                    totalPages: action.payload.totalPages,
+                    prevPage: action.payload.prevPage,
+                    nextPage: action.payload.nextPage,
+                };
+            })
+            .addCase(fetchMyApplications.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            })
+
             .addCase(fetchApplications.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -179,4 +210,4 @@ export const applicationSlice = createSlice({
     },
 });
 
-export const applicationSliceActions = {...applicationSlice, fetchApplications, fetchApplicationById, updateApplication, addComment, fetchStatistics};
+export const applicationSliceActions = {...applicationSlice, fetchMyApplications, fetchApplications, fetchApplicationById, updateApplication, addComment, fetchStatistics};

@@ -18,7 +18,7 @@ const AdminPanel = () => {
 
     useEffect(() => {
         dispatch(applicationSliceActions.fetchStatistics());
-        dispatch(managerSliceActions.fetchManagers({page: currentPage, pageSize: 10}));
+        dispatch(managerSliceActions.fetchManagers({page: currentPage, pageSize: 6})); // Змінено pageSize на 6
     }, [dispatch, currentPage]);
 
     const handlePageChange = (page: number) => {
@@ -40,15 +40,15 @@ const AdminPanel = () => {
                             <span>{application.statistics?.inWork || 0}</span>
                         </div>
                         <div className="stat-card">
-                            <h3>Approved</h3>
+                            <h3>Agree</h3>
                             <span>{application.statistics?.agree || 0}</span>
                         </div>
                         <div className="stat-card">
-                            <h3>Duplicates</h3>
+                            <h3>Dubbing</h3>
                             <span>{application.statistics?.dubbing || 0}</span>
                         </div>
                         <div className="stat-card">
-                            <h3>Rejected</h3>
+                            <h3>Disagree</h3>
                             <span>{application.statistics?.disagree || 0}</span>
                         </div>
                     </div>

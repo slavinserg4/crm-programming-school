@@ -4,8 +4,7 @@ import { CourseType } from "../enums/CourseTypeEnum";
 import { CourseFormat } from "../enums/CourseFormatStatus";
 import { ApplicationStatus } from "../enums/ApplicationStatusEnum";
 import { IUser } from "./IUser";
-import { IGroup } from "./IGroupModel";
-import { IComment } from "./ICommentModel";
+import { IOrderComment } from "./ICommentModel";
 
 export interface IApplication extends IBaseModel {
     _id: string;
@@ -21,9 +20,9 @@ export interface IApplication extends IBaseModel {
     sum: number | null;
     already_paid: number | null;
 
-    group: IGroup | null;
+    group: string;
     manager: IUser | null;
-    comments?: IComment[] | string[];
+    comments?: IOrderComment[];
 
     utm?: string;
     msg: string | null;
@@ -32,8 +31,8 @@ export interface IApplicationQuery {
     page: number;
     pageSize: number;
 
-    sort: keyof IApplication;
-    order: "asc" | "desc";
+    sort: keyof IApplication | null;
+    order: "asc" | "desc" | null;
 
     name?: string;
     surname?: string;
@@ -51,6 +50,7 @@ export interface IApplicationQuery {
     endDate?: string;
 }
 export interface IApplicationUpdate {
+    _id:string;
     name?: string;
     surname?: string;
     email?: string;

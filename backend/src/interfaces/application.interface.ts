@@ -47,9 +47,8 @@ export interface IApplicationQuery {
     status?: ApplicationStatus;
     group?: string;
     manager?: string;
-
-    startDate?: string;
-    endDate?: string;
+    sum?: number;
+    created_at?: string;
 }
 export interface IApplicationUpdate {
     name?: string;

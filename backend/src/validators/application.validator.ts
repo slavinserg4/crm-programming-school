@@ -15,10 +15,10 @@ export class ApplicationValidator {
 
         name: joi.string().trim().min(1).optional(),
         surname: joi.string().trim().min(1).optional(),
-        email: this.email.optional(),
-        phone: joi.string().regex(RegexEnum.PHONE).optional(),
-        age: joi.number().integer().min(10).max(100).optional(),
-
+        email: joi.string().trim().min(1).optional(),
+        phone: joi.string().trim().min(1).optional(),
+        age: joi.string().trim().min(1).optional(),
+        group: joi.string().trim().min(1).optional(),
         course: joi
             .string()
             .valid(...Object.values(Course))
@@ -36,8 +36,6 @@ export class ApplicationValidator {
             .string()
             .valid(...Object.values(ApplicationStatus))
             .optional(),
-
-        manager: joi.string().trim().optional(),
 
         sort: joi
             .string()
@@ -48,9 +46,14 @@ export class ApplicationValidator {
                 "phone",
                 "age",
                 "course",
+                "course_type",
+                "course_format",
                 "status",
+                "group",
+                "sum",
+                "already_paid",
                 "manager",
-                "createdAt",
+                "created_at",
             )
             .optional(),
         order: joi.string().valid("asc", "desc").optional(),
@@ -61,7 +64,7 @@ export class ApplicationValidator {
         surname: joi.string().trim().optional(),
         email: this.email.optional(),
         phone: joi.string().regex(RegexEnum.PHONE).optional(),
-        age: joi.number().integer().min(10).max(100).optional(),
+        age: joi.number().integer().min(1).max(100).optional(),
 
         course: joi
             .string()
@@ -80,12 +83,13 @@ export class ApplicationValidator {
             .string()
             .valid(...Object.values(ApplicationStatus))
             .optional(),
-
-        manager: joi.string().optional(),
+        already_paid: joi.number().optional(),
+        sum: joi.number().optional(),
+        group: joi.string().trim().allow("").optional(),
     });
 
     static addComment = joi.object({
-        comment: joi.string().trim().min(1).max(1000).required(),
+        text: joi.string().trim().min(1).max(1000).required(),
     });
 }
 

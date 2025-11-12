@@ -1,7 +1,9 @@
+import Activate from "../../components/Activate/Activate";
+
 const ActivatePage = () => {
     return (
         <div>
-
+            <Activate/>
         </div>
     );
 };

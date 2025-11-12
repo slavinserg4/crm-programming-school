@@ -1,5 +1,3 @@
-import { Types } from "mongoose";
-
 import { ApplicationStatus } from "../enums/application-status-enum";
 import {
     IApplication,
@@ -11,14 +9,12 @@ import { Application } from "../models/application.model";
 import { User } from "../models/user.model";
 
 class ApplicationRepository {
-    public async getAll(
-        query: IApplicationQuery,
-    ): Promise<[IApplication[], number]> {
+    private async buildQuery(query: IApplicationQuery, managerId?: string) {
         const {
             page = 1,
             pageSize = 25,
-            sort = "createdAt",
-            order = "desc",
+            sort,
+            order = "asc",
             name,
             surname,
             email,
@@ -30,8 +26,6 @@ class ApplicationRepository {
             status,
             group,
             manager,
-            startDate,
-            endDate,
         } = query;
 
         const filterQuery: any = {};
@@ -40,46 +34,86 @@ class ApplicationRepository {
         if (surname) filterQuery.surname = { $regex: surname, $options: "i" };
         if (email) filterQuery.email = { $regex: email, $options: "i" };
         if (phone) filterQuery.phone = { $regex: phone, $options: "i" };
-
-        if (manager) {
-            const managerFilter = {
-                firstName: { $regex: manager, $options: "i" },
-            };
-            const managers = await User.find(managerFilter);
-            const managerIds = managers.map((m) => m._id);
-            filterQuery.manager = { $in: managerIds };
-        }
-
         if (age) filterQuery.age = age;
         if (course) filterQuery.course = course;
         if (course_type) filterQuery.course_type = course_type;
         if (course_format) filterQuery.course_format = course_format;
         if (status) filterQuery.status = status;
-        if (group) filterQuery.group = new Types.ObjectId(group);
+        if (group) filterQuery.group = group;
 
-        if (startDate || endDate) {
-            filterQuery.createdAt = {};
-            if (startDate) filterQuery.createdAt.$gte = new Date(startDate);
-            if (endDate) filterQuery.createdAt.$lte = new Date(endDate);
+        if (managerId) {
+            filterQuery.manager = managerId;
+        } else if (manager) {
+            const managers = await User.find({
+                firstName: { $regex: manager, $options: "i" },
+            });
+            filterQuery.manager = { $in: managers.map((m) => m._id) };
         }
 
         const skip = (page - 1) * pageSize;
 
-        return await Promise.all([
-            Application.find(filterQuery)
-                .populate("manager", "firstName email")
-                .populate("comments")
-                .sort({ [sort]: order === "asc" ? 1 : -1 })
-                .skip(skip)
-                .limit(pageSize),
-            Application.countDocuments(filterQuery),
-        ]);
+        return { filterQuery, skip, sort, order, pageSize };
+    }
+
+    public async getAll(
+        query: IApplicationQuery,
+    ): Promise<[IApplication[], number]> {
+        const { filterQuery, skip, sort, order, pageSize } =
+            await this.buildQuery(query);
+
+        const dataPromise = Application.find(filterQuery)
+            .populate("manager", "firstName email")
+            .populate({
+                path: "comments",
+                populate: {
+                    path: "author",
+                    select: "firstName email createdAt",
+                },
+            })
+            .sort({ [sort]: order === "asc" ? 1 : -1 })
+            .skip(skip)
+            .limit(pageSize);
+
+        const countPromise = Application.countDocuments(filterQuery);
+
+        return await Promise.all([dataPromise, countPromise]);
+    }
+
+    public async myApplications(
+        query: IApplicationQuery,
+        userId: string,
+    ): Promise<[IApplication[], number]> {
+        const { filterQuery, skip, sort, order, pageSize } =
+            await this.buildQuery(query, userId);
+
+        const dataPromise = Application.find(filterQuery)
+            .populate("manager", "firstName email")
+            .populate({
+                path: "comments",
+                populate: {
+                    path: "author",
+                    select: "firstName email createdAt",
+                },
+            })
+            .sort({ [sort]: order === "asc" ? 1 : -1 })
+            .skip(skip)
+            .limit(pageSize);
+
+        const countPromise = Application.countDocuments(filterQuery);
+
+        return await Promise.all([dataPromise, countPromise]);
     }
 
     public getById(id: string): Promise<IApplication> {
         return Application.findById(id)
             .populate("manager", "name surname email")
-            .populate("comments");
+            .populate({
+                path: "comments",
+                populate: {
+                    path: "author",
+                    select: "firstName email createdAt",
+                },
+            });
     }
 
     public updateOne(
@@ -93,7 +127,13 @@ class ApplicationRepository {
             { new: true },
         )
             .populate("manager", "firstName email")
-            .populate("comments");
+            .populate({
+                path: "comments",
+                populate: {
+                    path: "author",
+                    select: "firstName email createdAt",
+                },
+            });
     }
 
     public addComment(
@@ -113,8 +153,15 @@ class ApplicationRepository {
             { new: true },
         )
             .populate("manager", "firstName email _id")
-            .populate("comments");
+            .populate({
+                path: "comments",
+                populate: {
+                    path: "author",
+                    select: "firstName email createdAt",
+                },
+            });
     }
+
     public async getApplicationsStatistics(): Promise<IManagerStats> {
         const pipeline = [
             {
@@ -138,19 +185,19 @@ class ApplicationRepository {
 
         results.forEach(({ _id, count }) => {
             switch (_id) {
-                case "In work":
+                case ApplicationStatus.IN_WORK:
                     statistics.inWork = count;
                     break;
-                case "New":
+                case ApplicationStatus.NEW:
                     statistics.new = count;
                     break;
-                case "Agree":
+                case ApplicationStatus.AGREE:
                     statistics.agree = count;
                     break;
-                case "Disagree":
+                case ApplicationStatus.DISAGREE:
                     statistics.disagree = count;
                     break;
-                case "Dubbing":
+                case ApplicationStatus.DUBBING:
                     statistics.dubbing = count;
                     break;
             }

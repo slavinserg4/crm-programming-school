@@ -32,7 +32,7 @@ const applicationSchema = new Schema(
         sum: { type: Number, default: null },
         already_paid: { type: Number, default: null },
 
-        group: { type: Schema.Types.ObjectId, ref: "Group", default: null },
+        group: { type: String, default: null },
         manager: {
             type: Schema.Types.ObjectId,
             ref: "User",

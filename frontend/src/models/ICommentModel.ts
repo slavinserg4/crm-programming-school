@@ -1,14 +1,11 @@
-import { IApplication } from "./IApplicationsModel";
-import { IBaseModel } from "./IBaseModel";
-
-export interface IComment extends IBaseModel {
-    _id: string;
-    applicationId: IApplication | string;
+export interface IOrderComment {
     text: string;
-    author: string;
+    createdAt: string;
+    author: IAuthor;
 }
-export interface ICommentCreate {
-    applicationId: string;
-    text: string;
-    author: string;
+export interface IAuthor {
+  _id: string;
+  createdAt: string;
+  email: string;
+  firstName: string;
 }

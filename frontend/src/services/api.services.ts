@@ -2,7 +2,7 @@ import axios from "axios";
 import { ILogin } from "../models/IAuthModel";
 import { IUser } from "../models/IUser";
 import { ITokenPair } from "../models/ITokenPair";
-import { IApplication, IApplicationQuery, IApplicationUpdate } from "../models/IApplicationsModel";
+import { IApplication, IApplicationQuery } from "../models/IApplicationsModel";
 import { retriveLocalStorage } from "./helper";
 import { IPaginatedResponse } from "../models/IPaginatedResponse";
 import { IStatsOfStatus } from "../models/IManagerStats";
@@ -109,20 +109,35 @@ export const apiService = {
             return res.data;
         },
 
-        async update(id: string, data: IApplicationUpdate): Promise<IApplication> {
-            const res = await axiosInstance.patch<IApplication>(`/applications/update/${id}`, data);
+        async update(id: string, data: Partial<IApplication>): Promise<IApplication> {
+            const token = retriveLocalStorage<ITokenPair>('tokens').accessToken;
+            const res = await axiosInstance.patch<IApplication>(`/applications/update/${id}`, data, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
             return res.data;
         },
 
         async addComment(id: string, comment: string): Promise<IApplication> {
-            const res = await axiosInstance.patch<IApplication>(`/applications/addcomm/${id}`, { text: comment });
+            const token = retriveLocalStorage<ITokenPair>('tokens').accessToken;
+            const res = await axiosInstance.patch<IApplication>(`/applications/addcomm/${id}`, { text: comment },{
+                headers: { Authorization: `Bearer ${token}` }
+            });
             return res.data;
         },
 
         async getStats(): Promise<IStatsOfStatus> {
             const res = await axiosInstance.get<IStatsOfStatus>("/applications/stats");
             return res.data;
+        },
+        async getMyApplications(params?:IApplicationQuery): Promise<IPaginatedResponse<IApplication>> {
+            const token = retriveLocalStorage<ITokenPair>('tokens').accessToken;
+            const res = await axiosInstance.get<IPaginatedResponse<IApplication>>("/applications/my-applications", {
+                params,
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            return res.data;
         }
+
     },
 
 

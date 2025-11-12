@@ -74,5 +74,22 @@ class ApplicationController {
             next(error);
         }
     }
+    public async myApplications(
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ) {
+        try {
+            const query = req.query as any as IApplicationQuery;
+            const { userId } = res.locals.tokenPayload as ITokenPayload;
+            const applications = await applicationsService.myApplications(
+                query,
+                userId,
+            );
+            return res.status(StatusCodesEnum.OK).json(applications);
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 export const applicationController = new ApplicationController();

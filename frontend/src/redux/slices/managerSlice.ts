@@ -8,6 +8,8 @@ interface ManagerState {
     managers: IUser[];
     loading: boolean;
     error: string | null;
+    activationUrl: string | null;
+    recoveryUrl: string | null;
     pagination: {
         totalItems: number;
         totalPages: number;
@@ -20,6 +22,8 @@ const initialState: ManagerState = {
     managers: [],
     loading: false,
     error: null,
+    activationUrl: null,
+    recoveryUrl: null,
     pagination: {
         totalItems: 0,
         totalPages: 0,
@@ -27,6 +31,7 @@ const initialState: ManagerState = {
         nextPage: false,
     },
 };
+
 
 export const fetchManagers = createAsyncThunk(
     'managers/fetchAll',
@@ -60,6 +65,20 @@ export const activateManager = createAsyncThunk(
         }
     }
 );
+export const activateWithPassword = createAsyncThunk<
+    any,
+    { token: string; password: string; confirmPassword: string },
+    { rejectValue: string }
+>(
+    'managers/activateWithPassword',
+    async ({ token, password, confirmPassword }, { rejectWithValue }) => {
+        try {
+            return await apiService.managers.activate(token, { firstPassword: password, secondPassword: confirmPassword });
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data?.message || "Помилка активації");
+        }
+    }
+);
 
 export const banManager = createAsyncThunk(
     'managers/ban',
@@ -82,6 +101,31 @@ export const unbanManager = createAsyncThunk(
         }
     }
 );
+export const passwordRecoveryRequest = createAsyncThunk(
+    'managers/passwordRecovery',
+    async (id: string, { rejectWithValue }) => {
+        try {
+            return await apiService.managers.passwordRecoveryRequest(id);
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data?.message || "Помилка запиту на відновлення паролю");
+        }
+    }
+);
+export const recoveryWithPassword = createAsyncThunk<
+    any,
+    { token: string; password: string; confirmPassword: string },
+    { rejectValue: string }
+>(
+    'managers/recoveryWithPassword',
+    async ({ token, password, confirmPassword }, { rejectWithValue }) => {
+        try {
+            return await apiService.managers.recovery(token, { firstPassword: password, secondPassword: confirmPassword });
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data?.message || "Помилка відновлення паролю");
+        }
+    }
+);
+
 
 export const managerSlice = createSlice({
     name: 'managers',
@@ -153,8 +197,42 @@ export const managerSlice = createSlice({
             .addCase(unbanManager.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload as string;
+            })
+            .addCase(activateManager.fulfilled, (state, action) => {
+                state.loading = false;
+                state.activationUrl = action.payload.url;
+            })
+            .addCase(passwordRecoveryRequest.fulfilled, (state, action) => {
+                state.loading = false;
+                state.recoveryUrl = action.payload.url;
+            })
+            .addCase(activateWithPassword.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(activateWithPassword.fulfilled, (state, action) => {
+                state.loading = false;
+                state.activationUrl = null; // можна очистити попередній токен/URL
+            })
+            .addCase(activateWithPassword.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            })
+            .addCase(recoveryWithPassword.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(recoveryWithPassword.fulfilled, (state) => {
+                state.loading = false;
+                state.recoveryUrl = null;
+            })
+            .addCase(recoveryWithPassword.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
             });
+
+
     },
 });
 
-export const managerSliceActions = {...managerSlice, fetchManagers, createManager, activateManager, banManager, unbanManager};
+export const managerSliceActions = {...managerSlice, fetchManagers, createManager, activateManager, banManager, unbanManager, passwordRecoveryRequest, activateWithPassword,recoveryWithPassword };

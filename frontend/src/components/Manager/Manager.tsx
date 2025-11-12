@@ -1,5 +1,6 @@
+
 import { IUser } from "../../models/IUser";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { useAppDispatch } from "../../redux/hooks/useAppDispatch";
 import { managerSliceActions } from "../../redux/slices/managerSlice";
 import './Manager.css';
@@ -10,21 +11,29 @@ interface ManagerProps {
 
 const Manager: FC<ManagerProps> = ({ manager }) => {
     const dispatch = useAppDispatch();
+    const [showUrl, setShowUrl] = useState<string | null>(null);
 
-    const handleActivate = () => {
-        dispatch(managerSliceActions.activateManager(manager._id));
+    const handleActivate = async () => {
+        const result = await dispatch(managerSliceActions.activateManager(manager._id));
+        if (managerSliceActions.activateManager.fulfilled.match(result)) {
+            setShowUrl(result.payload.url);
+        }
+    };
+
+    const handlePasswordRecovery = async () => {
+        const result = await dispatch(managerSliceActions.passwordRecoveryRequest(manager._id));
+        if (managerSliceActions.passwordRecoveryRequest.fulfilled.match(result)) {
+            setShowUrl(result.payload.url);
+        }
     };
 
     const handleBanUnban = () => {
         if (manager.isBanned) {
             dispatch(managerSliceActions.unbanManager(manager._id));
-            dispatch(managerSliceActions.fetchManagers({page:1, pageSize:2}));
-
         } else {
             dispatch(managerSliceActions.banManager(manager._id));
-            dispatch(managerSliceActions.fetchManagers({page:1, pageSize:2}));
-
         }
+        dispatch(managerSliceActions.fetchManagers({page:1, pageSize:6}));
     };
 
     return (
@@ -38,6 +47,18 @@ const Manager: FC<ManagerProps> = ({ manager }) => {
             </div>
             <div className="manager-info">
                 <p><strong>Email:</strong> {manager.email}</p>
+                {showUrl && (
+                    <div className="url-container">
+                        <input type="text" value={showUrl} readOnly />
+                        <button onClick={() => {
+                            navigator.clipboard.writeText(showUrl);
+                            alert('URL скопійовано!');
+                        }}>
+                            Копіювати
+                        </button>
+                        <button onClick={() => setShowUrl(null)}>Закрити</button>
+                    </div>
+                )}
             </div>
             <div className="manager-actions">
                 {!manager.isActive && (
@@ -48,6 +69,12 @@ const Manager: FC<ManagerProps> = ({ manager }) => {
                         Activate
                     </button>
                 )}
+                <button
+                    className="action-button recovery"
+                    onClick={handlePasswordRecovery}
+                >
+                    Reset Password
+                </button>
                 <button
                     className={`action-button ${manager.isBanned ? 'unban' : 'ban'}`}
                     onClick={handleBanUnban}

@@ -63,6 +63,13 @@ class ApplicationsService {
         }
 
         await userRepository.addApplicationToUser(userId, application._id);
+        if (application.status === ApplicationStatus.IN_WORK) {
+            return await applicationRepository.updateOne(
+                id,
+                { ...dto },
+                userId,
+            );
+        }
         return await applicationRepository.updateOne(
             id,
             { ...dto, status: ApplicationStatus.IN_WORK },
@@ -105,6 +112,24 @@ class ApplicationsService {
     }
     public async getApplicationsStatistics(): Promise<IManagerStats> {
         return await applicationRepository.getApplicationsStatistics();
+    }
+    public async myApplications(
+        query: IApplicationQuery,
+        userId: string,
+    ): Promise<IPaginatedResponse<IApplication>> {
+        const [data, totalItems] = await applicationRepository.myApplications(
+            query,
+            userId,
+        );
+        const totalPages = Math.ceil(totalItems / query.pageSize);
+        const currentPage = query.page || 1;
+        return {
+            totalItems,
+            totalPages,
+            prevPage: currentPage > 1,
+            nextPage: currentPage < totalPages,
+            data,
+        };
     }
 }
 export const applicationsService = new ApplicationsService();
