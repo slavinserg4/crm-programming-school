@@ -5,9 +5,14 @@ import ActivatePage from "../pages/ActivatePage/ActivatePage";
 import RecoveryPage from "../pages/RecoveryPage/RecoveryPage";
 import OrdersPage from "../pages/OrdersPage/OrdersPage";
 import AdminPanelPage from "../pages/AdminPanelPage/AdminPanelPage";
+import AuthRedirect from "../components/AuthRedirect/AuthRedirect";
 
 export const router = createBrowserRouter([
-    {index:true, element:<LoginPage/>},
+    {index:true, element:(
+            <AuthRedirect>
+                <LoginPage/>
+            </AuthRedirect>
+        )},
     {
         path: "/",element:<MainLayout/>, children:[
             {

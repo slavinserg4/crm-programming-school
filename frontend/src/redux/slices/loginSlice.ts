@@ -25,9 +25,22 @@ export const userLogin = createAsyncThunk(
             return  await apiService.auth.signIn({email, password});
         } catch (e: any) {
             if (e.response?.status === 401) {
-                return thunkAPI.rejectWithValue("Невірний email або пароль");
+                return thunkAPI.rejectWithValue("Invalid email or password");
             }
-            return thunkAPI.rejectWithValue(e.response?.data?.message || "Помилка входу. Спробуйте ще раз.");
+            return thunkAPI.rejectWithValue(e.response?.data?.message || "Login failed. Error");
+        }
+    }
+);
+export const me = createAsyncThunk(
+    'loginSlice/me',
+    async (_, thunkAPI) => {
+        try {
+            return await apiService.auth.me();
+        } catch (e: any) {
+            if (e.response?.status === 401) {
+                return thunkAPI.rejectWithValue("Login again please");
+            }
+            return thunkAPI.rejectWithValue(e.response?.data?.message || "Login failed. Error");
         }
     }
 );
@@ -55,6 +68,16 @@ export const loginSlice = createSlice({
                 state.error = action.payload as string;
                 state.login = false;
             })
+            .addCase(me.fulfilled, (state, action) => {
+                state.user = action.payload;
+                state.login = true;
+                state.error = null;
+            })
+            .addCase(me.rejected, (state, action) => {
+                state.error = action.payload as string;
+                state.login = false;
+            })
+
 });
 
-export const loginSliceActions = {...loginSlice.actions, userLogin}
+export const loginSliceActions = {...loginSlice.actions, userLogin, me}

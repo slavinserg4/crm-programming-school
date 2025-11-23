@@ -3,9 +3,14 @@ import { useAppDispatch } from "../../redux/hooks/useAppDispatch";
 import { Link, useNavigate } from "react-router-dom";
 import { loginSliceActions } from "../../redux/slices/loginSlice";
 import "./Menu.css";
+import {useEffect} from "react";
 
 const Menu = () => {
     const { user } = useAppSelector((state) => state.loginPart);
+    useEffect(() => {
+         dispatch(loginSliceActions.me())
+    }, []);
+    console.log(user)
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 

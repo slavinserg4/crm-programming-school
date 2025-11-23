@@ -8,7 +8,6 @@ import "./LoginComponent.css";
 const LoginComponent = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-
     const { login, error } = useAppSelector((state) => state.loginPart);
 
     const [email, setEmail] = useState("");
@@ -22,6 +21,7 @@ const LoginComponent = () => {
     useEffect(() => {
         if (login) {
             navigate("/orders");
+            sessionStorage.setItem("login", "true");
         }
         return () => {
             dispatch(loginSliceActions.clearError());
@@ -40,6 +40,7 @@ const LoginComponent = () => {
                         type="email"
                         placeholder="Enter your email"
                         value={email}
+                        required={true}
                         onChange={(e) => setEmail(e.target.value)}
                     />
 
@@ -48,6 +49,7 @@ const LoginComponent = () => {
                         type="password"
                         placeholder="Enter your password"
                         value={password}
+                        required={true}
                         onChange={(e) => setPassword(e.target.value)}
                     />
 

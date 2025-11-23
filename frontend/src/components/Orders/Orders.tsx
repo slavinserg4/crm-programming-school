@@ -8,6 +8,7 @@ import { applicationSliceActions } from "../../redux/slices/applicationSlice";
 import Pagination from "../Pagination/Pagination";
 import OrderFilters from "../OrderFilters/OrderFilters";
 import EditOrderModal from "../EditOrderModal/EditOrderModal";
+import {loginSliceActions} from "../../redux/slices/loginSlice";
 
 const Orders: FC = () => {
     const dispatch = useAppDispatch();
@@ -50,6 +51,7 @@ const Orders: FC = () => {
 
     useEffect(() => {
         triggerFetch(filters);
+        dispatch(loginSliceActions.me())
     }, []);
 
     const handleFilterChange = (newFilters: Partial<IApplicationQuery>) => {
