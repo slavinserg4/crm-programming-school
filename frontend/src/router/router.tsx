@@ -6,6 +6,7 @@ import RecoveryPage from "../pages/RecoveryPage/RecoveryPage";
 import OrdersPage from "../pages/OrdersPage/OrdersPage";
 import AdminPanelPage from "../pages/AdminPanelPage/AdminPanelPage";
 import AuthRedirect from "../components/AuthRedirect/AuthRedirect";
+import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute";
 
 export const router = createBrowserRouter([
     {index:true, element:(
@@ -14,7 +15,11 @@ export const router = createBrowserRouter([
             </AuthRedirect>
         )},
     {
-        path: "/",element:<MainLayout/>, children:[
+        path: "/",element: (
+            <ProtectedRoute>
+                <MainLayout/>
+            </ProtectedRoute>
+        ), children:[
             {
                 path:"orders", element:<OrdersPage/>
             },

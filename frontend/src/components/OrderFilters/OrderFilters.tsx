@@ -33,14 +33,14 @@ const OrderFilters: FC<OrderFiltersProps> = ({
                 <input
                     type="text"
                     className="filter-input"
-                    placeholder="Ім'я"
+                    placeholder="Name"
                     value={filters.name || ""}
                     onChange={(e) => handleChange("name", e.target.value)}
                 />
                 <input
                     type="text"
                     className="filter-input"
-                    placeholder="Прізвище"
+                    placeholder="Surname"
                     value={filters.surname || ""}
                     onChange={(e) => handleChange("surname", e.target.value)}
                 />
@@ -54,21 +54,21 @@ const OrderFilters: FC<OrderFiltersProps> = ({
                 <input
                     type="text"
                     className="filter-input"
-                    placeholder="Телефон"
+                    placeholder="Phone"
                     value={filters.phone || ""}
                     onChange={(e) => handleChange("phone", e.target.value)}
                 />
                 <input
                     type="text"
                     className="filter-input"
-                    placeholder="Вік"
+                    placeholder="Age"
                     value={filters.age || ""}
                     onChange={(e) => handleChange("age", e.target.value)}
                 />
                 <input
                     type="text"
                     className="filter-input"
-                    placeholder="Група"
+                    placeholder="Group"
                     value={filters.group || ""}
                     onChange={(e) => handleChange("group", e.target.value)}
                 />
@@ -80,7 +80,7 @@ const OrderFilters: FC<OrderFiltersProps> = ({
                     value={filters.course || ""}
                     onChange={(e) => handleChange("course", e.target.value)}
                 >
-                    <option value="">Всі курси</option>
+                    <option value="">All courses</option>
                     {Object.values(COURSE).map((course) => (
                         <option key={course} value={course}>
                             {course}
@@ -93,7 +93,7 @@ const OrderFilters: FC<OrderFiltersProps> = ({
                     value={filters.status || ""}
                     onChange={(e) => handleChange("status", e.target.value)}
                 >
-                    <option value="">Всі статуси</option>
+                    <option value="">All statuses</option>
                     {Object.values(APPLICATION_STATUS).map((status) => (
                         <option key={status} value={status}>
                             {status}
@@ -106,7 +106,7 @@ const OrderFilters: FC<OrderFiltersProps> = ({
                     value={filters.course_format || ""}
                     onChange={(e) => handleChange("course_format", e.target.value)}
                 >
-                    <option value="">Всі формати</option>
+                    <option value="">All formats</option>
                     {Object.values(COURSE_FORMAT).map((format) => (
                         <option key={format} value={format}>
                             {format}
@@ -119,7 +119,7 @@ const OrderFilters: FC<OrderFiltersProps> = ({
                     value={filters.course_type || ""}
                     onChange={(e) => handleChange("course_type", e.target.value)}
                 >
-                    <option value="">Всі типи</option>
+                    <option value="">All types</option>
                     {Object.values(COURSE_TYPE).map((type) => (
                         <option key={type} value={type}>
                             {type}
@@ -135,15 +135,15 @@ const OrderFilters: FC<OrderFiltersProps> = ({
                         checked={onlyMyOrders}
                         onChange={(e) => setOnlyMyOrders(e.target.checked)}
                     />
-                    Тільки мої заявки
+                    My applications
                 </label>
 
                 <button onClick={onReset} className="reset-button">
-                    Скинути фільтри
+                    Reset filters
                 </button>
 
                 <button onClick={onExport} className="export-button">
-                    Експорт в Excel
+                    Export to Excel
                 </button>
             </div>
         </div>

@@ -1,5 +1,5 @@
-export const retriveLocalStorage = <T>(key: string) => {
-    const object = localStorage.getItem(key) || '';
+export const retriveSessionStorage = <T>(key: string) => {
+    const object = sessionStorage.getItem(key) || '';
     if (!object) {
         return {} as T
     }

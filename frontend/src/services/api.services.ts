@@ -3,7 +3,7 @@ import { ILogin } from "../models/IAuthModel";
 import { IUser } from "../models/IUser";
 import { ITokenPair } from "../models/ITokenPair";
 import { IApplication, IApplicationQuery } from "../models/IApplicationsModel";
-import { retriveLocalStorage } from "./helper";
+import { retriveSessionStorage } from "./helper";
 import { IPaginatedResponse } from "../models/IPaginatedResponse";
 import { IStatsOfStatus } from "../models/IManagerStats";
 import { IManagerQuery } from "../models/IManagerModel";
@@ -42,7 +42,7 @@ axiosInstance.interceptors.response.use(
                 return new Promise((resolve, reject) => {
                     failedQueue.push({ resolve, reject });
                 }).then(() => {
-                    originalRequest.headers.Authorization = 'Bearer ' + retriveLocalStorage<ITokenPair>('tokens').accessToken;
+                    originalRequest.headers.Authorization = 'Bearer ' + retriveSessionStorage<ITokenPair>('tokens').accessToken;
                     return axiosInstance(originalRequest);
                 }).catch(err => Promise.reject(err));
             }
@@ -52,14 +52,14 @@ axiosInstance.interceptors.response.use(
 
             try {
                 await apiService.auth.refresh();
-                const newToken = retriveLocalStorage<ITokenPair>('tokens').accessToken;
+                const newToken = retriveSessionStorage<ITokenPair>('tokens').accessToken;
                 processQueue(null, newToken);
                 originalRequest.headers.Authorization = 'Bearer ' + newToken;
                 return axiosInstance(originalRequest);
             } catch (e) {
                 processQueue(e, null);
-                localStorage.removeItem('user');
-                localStorage.removeItem('tokens');
+                sessionStorage.removeItem('user');
+                sessionStorage.removeItem('tokens');
                 window.location.href = '/login';
                 return Promise.reject(e);
             } finally {
@@ -71,7 +71,7 @@ axiosInstance.interceptors.response.use(
 );
 axiosInstance.interceptors.request.use((request)=>{
     if(request.method?.toUpperCase() == "GET"){
-        request.headers.Authorization = 'Bearer ' + retriveLocalStorage<ITokenPair>('tokens').accessToken;
+        request.headers.Authorization = 'Bearer ' + retriveSessionStorage<ITokenPair>('tokens').accessToken;
     }
     return request;
 })
@@ -81,14 +81,14 @@ export const apiService = {
     auth: {
         async signIn(data: ILogin): Promise<IUser> {
             const res = await axiosInstance.post<{user:IUser, tokens:ITokenPair}>("/auth/sign-in", data);
-            localStorage.setItem('tokens', JSON.stringify(res.data.tokens));
+            sessionStorage.setItem('tokens', JSON.stringify(res.data.tokens));
             return res.data.user;
         },
 
         async refresh(): Promise<ITokenPair> {
-            const refreshToken = retriveLocalStorage<ITokenPair>('tokens').accessToken;
+            const refreshToken = retriveSessionStorage<ITokenPair>('tokens').accessToken;
             const res = await axiosInstance.post<ITokenPair>("/auth/refresh", { refreshToken });
-            localStorage.setItem('tokens', JSON.stringify(res.data));
+            sessionStorage.setItem('tokens', JSON.stringify(res.data));
             return res.data;
         },
 
@@ -110,7 +110,7 @@ export const apiService = {
         },
 
         async update(id: string, data: Partial<IApplication>): Promise<IApplication> {
-            const token = retriveLocalStorage<ITokenPair>('tokens').accessToken;
+            const token = retriveSessionStorage<ITokenPair>('tokens').accessToken;
             const res = await axiosInstance.patch<IApplication>(`/applications/update/${id}`, data, {
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -118,7 +118,7 @@ export const apiService = {
         },
 
         async addComment(id: string, comment: string): Promise<IApplication> {
-            const token = retriveLocalStorage<ITokenPair>('tokens').accessToken;
+            const token = retriveSessionStorage<ITokenPair>('tokens').accessToken;
             const res = await axiosInstance.patch<IApplication>(`/applications/addcomm/${id}`, { text: comment },{
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -130,7 +130,7 @@ export const apiService = {
             return res.data;
         },
         async getMyApplications(params?:IApplicationQuery): Promise<IPaginatedResponse<IApplication>> {
-            const token = retriveLocalStorage<ITokenPair>('tokens').accessToken;
+            const token = retriveSessionStorage<ITokenPair>('tokens').accessToken;
             const res = await axiosInstance.get<IPaginatedResponse<IApplication>>("/applications/my-applications", {
                 params,
                 headers: { Authorization: `Bearer ${token}` }
@@ -152,7 +152,7 @@ export const apiService = {
             firstName: string;
             lastName: string;
         }): Promise<IUser> {
-            const token = retriveLocalStorage<ITokenPair>('tokens').accessToken;
+            const token = retriveSessionStorage<ITokenPair>('tokens').accessToken;
             const res = await axiosInstance.post<IUser>("/manager/create", data, {
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -160,7 +160,7 @@ export const apiService = {
         },
 
         async activateRequest(id: string): Promise<{ message: string; url: string }> {
-            const token = retriveLocalStorage<ITokenPair>('tokens').accessToken;
+            const token = retriveSessionStorage<ITokenPair>('tokens').accessToken;
             const res = await axiosInstance.post(`/manager/activate-request/${id}`, {}, {
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -168,7 +168,7 @@ export const apiService = {
         },
 
         async ban(id: string) {
-            const token = retriveLocalStorage<ITokenPair>('tokens').accessToken;
+            const token = retriveSessionStorage<ITokenPair>('tokens').accessToken;
             const res = await axiosInstance.patch(`/manager/ban/${id}`, {}, {
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -176,7 +176,7 @@ export const apiService = {
         },
 
         async unban(id: string) {
-            const token = retriveLocalStorage<ITokenPair>('tokens').accessToken;
+            const token = retriveSessionStorage<ITokenPair>('tokens').accessToken;
             const res = await axiosInstance.patch(`/manager/unban/${id}`, {}, {
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -184,7 +184,7 @@ export const apiService = {
         },
 
         async passwordRecoveryRequest(id: string): Promise<{ message: string; url: string }> {
-            const token = retriveLocalStorage<ITokenPair>('tokens').accessToken;
+            const token = retriveSessionStorage<ITokenPair>('tokens').accessToken;
             const res = await axiosInstance.post(`/manager/recovery-request/${id}`, {}, {
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -192,7 +192,7 @@ export const apiService = {
         },
 
         async recovery(token: string, passwords: { firstPassword: string; secondPassword: string }) {
-            const accessToken = retriveLocalStorage<ITokenPair>('tokens').accessToken;
+            const accessToken = retriveSessionStorage<ITokenPair>('tokens').accessToken;
             const res = await axiosInstance.post(`/manager/recovery/${token}`, passwords, {
                 headers: { Authorization: `Bearer ${accessToken}` }
             });
@@ -200,7 +200,7 @@ export const apiService = {
         },
 
         async activate(token: string, passwords: { firstPassword: string; secondPassword: string }) {
-            const accessToken = retriveLocalStorage<ITokenPair>('tokens').accessToken;
+            const accessToken = retriveSessionStorage<ITokenPair>('tokens').accessToken;
             const res = await axiosInstance.patch(`/manager/activate/${token}`, passwords, {
                 headers: { Authorization: `Bearer ${accessToken}` }
             });
