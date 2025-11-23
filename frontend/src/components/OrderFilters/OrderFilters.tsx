@@ -24,7 +24,13 @@ const OrderFilters: FC<OrderFiltersProps> = ({
                                                  setOnlyMyOrders,
                                              }) => {
     const handleChange = (field: keyof IApplicationQuery, value: string) => {
-        onFilterChange({ [field]: value });
+        let parsed: any = value;
+
+        if (value === "") parsed = null;
+
+        if (field === "age" && value !== "") parsed = Number(value);
+
+        onFilterChange({ [field]: parsed });
     };
 
     return (

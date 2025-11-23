@@ -12,6 +12,11 @@ router.get(
     applicationController.getApplicationsStatistics,
 );
 router.get(
+    "/getAll",
+    authMiddleware.checkAccessToken,
+    applicationController.getAllWithoutPagination,
+);
+router.get(
     "/my-applications",
     authMiddleware.checkAccessToken,
     commonMiddleware.validateQuery(ApplicationValidator.getAll),

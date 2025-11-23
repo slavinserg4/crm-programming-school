@@ -99,6 +99,10 @@ export const apiService = {
     },
 
     applications: {
+        async getAllWithoutPagination(): Promise<IApplication[]> {
+            const res = await axiosInstance.get<IApplication[]>("/applications/getAll");
+            return res.data;
+        },
         async getAll(params?: IApplicationQuery): Promise<IPaginatedResponse<IApplication>> {
             const res = await axiosInstance.get<IPaginatedResponse<IApplication>>("/applications", { params });
             return res.data;

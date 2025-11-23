@@ -34,33 +34,15 @@ export interface IApplicationQuery {
     sort: keyof IApplication | null;
     order: "asc" | "desc" | null;
 
-    name?: string;
-    surname?: string;
-    email?: string;
-    phone?: string;
-    age?: number;
-    course?: Course;
-    course_type?: CourseType;
-    course_format?: CourseFormat;
-    status?: ApplicationStatus;
-    group?: string;
-    manager?: string;
-
-    startDate?: string;
-    endDate?: string;
-}
-export interface IApplicationUpdate {
-    _id:string;
-    name?: string;
-    surname?: string;
-    email?: string;
-    phone?: string;
-    age?: number;
-    status?: ApplicationStatus;
-    group?: string;
-    sum?: number;
-    already_paid?: number;
-    course?: Course;
-    course_type?: CourseType;
-    course_format?: CourseFormat;
+    name?: string | null;
+    surname?: string | null;
+    email?: string | null;
+    phone?: string | null;
+    age?: number | null;
+    course?: Course | null;
+    course_type?: CourseType | null;
+    course_format?: CourseFormat | null;
+    status?: ApplicationStatus | null;
+    group?: string | null;
+    manager?: string | null;
 }

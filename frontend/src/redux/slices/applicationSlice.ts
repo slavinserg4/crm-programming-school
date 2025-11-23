@@ -16,6 +16,7 @@ interface ApplicationState {
         prevPage: boolean;
         nextPage: boolean;
     };
+    allApplications: IApplication[];
 }
 
 const initialState: ApplicationState = {
@@ -30,6 +31,7 @@ const initialState: ApplicationState = {
         prevPage: false,
         nextPage: false,
     },
+    allApplications:[]
 };
 
 export const fetchMyApplications = createAsyncThunk(
@@ -49,6 +51,16 @@ export const fetchApplications = createAsyncThunk(
     async (params: IApplicationQuery, { rejectWithValue }) => {
         try {
             return await apiService.applications.getAll(params);
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data?.message || "Помилка завантаження заявок");
+        }
+    }
+);
+export const fetchApplicationsWithoutPagination = createAsyncThunk(
+    'applications/fetchAllWithoutPagination',
+    async (_, { rejectWithValue }) => {
+        try {
+            return await apiService.applications.getAllWithoutPagination();
         } catch (error: any) {
             return rejectWithValue(error.response?.data?.message || "Помилка завантаження заявок");
         }
@@ -130,7 +142,14 @@ export const applicationSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload as string;
             })
-
+            .addCase(fetchApplicationsWithoutPagination.fulfilled, (state, action: PayloadAction<IApplication[]>) => {
+                state.loading = false;
+                state.allApplications = action.payload;
+            })
+            .addCase(fetchApplicationsWithoutPagination.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            })
             .addCase(fetchApplications.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -210,4 +229,4 @@ export const applicationSlice = createSlice({
     },
 });
 
-export const applicationSliceActions = {...applicationSlice, fetchMyApplications, fetchApplications, fetchApplicationById, updateApplication, addComment, fetchStatistics};
+export const applicationSliceActions = {...applicationSlice, fetchMyApplications, fetchApplications, fetchApplicationById, updateApplication, addComment, fetchStatistics, fetchApplicationsWithoutPagination};

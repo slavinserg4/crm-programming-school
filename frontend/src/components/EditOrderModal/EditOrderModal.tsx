@@ -58,10 +58,10 @@ const EditOrderModal: FC<EditOrderModalProps> = ({ order, onClose, onSave }) => 
     return (
         <div className="modal-overlay">
             <div className="modal-content">
-                <h2>Редагувати заявку</h2>
+                <h2>Edit Application</h2>
                 <form onSubmit={handleSubmit} noValidate>
                     <div className="form-group">
-                        <label>Ім'я:</label>
+                        <label>First Name:</label>
                         <input
                             autoFocus
                             className={errors.name ? "error-input" : ""}
@@ -73,7 +73,7 @@ const EditOrderModal: FC<EditOrderModalProps> = ({ order, onClose, onSave }) => 
                     </div>
 
                     <div className="form-group">
-                        <label>Прізвище:</label>
+                        <label>Last Name:</label>
                         <input
                             className={errors.surname ? "error-input" : ""}
                             type="text"
@@ -95,7 +95,7 @@ const EditOrderModal: FC<EditOrderModalProps> = ({ order, onClose, onSave }) => 
                     </div>
 
                     <div className="form-group">
-                        <label>Телефон:</label>
+                        <label>Phone:</label>
                         <input
                             className={errors.phone ? "error-input" : ""}
                             type="tel"
@@ -106,7 +106,7 @@ const EditOrderModal: FC<EditOrderModalProps> = ({ order, onClose, onSave }) => 
                     </div>
 
                     <div className="form-group">
-                        <label>Вік:</label>
+                        <label>Age:</label>
                         <input
                             className={errors.age ? "error-input" : ""}
                             type="number"
@@ -118,13 +118,13 @@ const EditOrderModal: FC<EditOrderModalProps> = ({ order, onClose, onSave }) => 
                     </div>
 
                     <div className="form-group">
-                        <label>Курс:</label>
+                        <label>Course:</label>
                         <select
                             value={formData.course}
                             onChange={(e) => handleChange("course", e.target.value as Course)}
                             className={errors.course ? "error-input" : ""}
                         >
-                            <option value="">Виберіть курс</option>
+                            <option value="">Select a course</option>
                             {Object.values(COURSE).map((c) => (
                                 <option key={c} value={c}>{c}</option>
                             ))}
@@ -133,13 +133,13 @@ const EditOrderModal: FC<EditOrderModalProps> = ({ order, onClose, onSave }) => 
                     </div>
 
                     <div className="form-group">
-                        <label>Тип курсу:</label>
+                        <label>Course Type:</label>
                         <select
                             value={formData.course_type}
                             onChange={(e) => handleChange("course_type", e.target.value as CourseType)}
                             className={errors.course_type ? "error-input" : ""}
                         >
-                            <option value="">Виберіть тип курсу</option>
+                            <option value="">Select course type</option>
                             {Object.values(COURSE_TYPE).map((t) => (
                                 <option key={t} value={t}>{t}</option>
                             ))}
@@ -148,27 +148,28 @@ const EditOrderModal: FC<EditOrderModalProps> = ({ order, onClose, onSave }) => 
                     </div>
 
                     <div className="form-group">
-                        <label>Формат:</label>
+                        <label>Format:</label>
                         <select
                             value={formData.course_format}
                             onChange={(e) => handleChange("course_format", e.target.value as CourseFormat)}
                             className={errors.course_format ? "error-input" : ""}
                         >
-                            <option value="">Виберіть формат</option>
+                            <option value="">Select format</option>
                             {Object.values(COURSE_FORMAT).map((f) => (
                                 <option key={f} value={f}>{f}</option>
                             ))}
                         </select>
                         {errors.course_format && <p className="error">{errors.course_format}</p>}
                     </div>
+
                     <div className="form-group">
-                        <label>Статус:</label>
+                        <label>Status:</label>
                         <select
                             value={formData.status}
                             onChange={(e) => handleChange("status", e.target.value as ApplicationStatus)}
                             className={errors.status ? "error-input" : ""}
                         >
-                            <option value="">Виберіть статус</option> {/* placeholder */}
+                            <option value="">Select status</option>
                             {Object.values(APPLICATION_STATUS).map((s) => (
                                 <option key={s} value={s}>
                                     {s}
@@ -202,7 +203,7 @@ const EditOrderModal: FC<EditOrderModalProps> = ({ order, onClose, onSave }) => 
                     </div>
 
                     <div className="form-group">
-                        <label>Sum:</label>
+                        <label>Total Price:</label>
                         <input
                             className={errors.sum ? "error-input" : ""}
                             type="number"
@@ -215,10 +216,10 @@ const EditOrderModal: FC<EditOrderModalProps> = ({ order, onClose, onSave }) => 
 
                     <div className="modal-actions">
                         <button type="button" onClick={onClose} className="btn-cancel">
-                            Скасувати
+                            Cancel
                         </button>
                         <button type="submit" className="btn-save">
-                            Зберегти
+                            Save
                         </button>
                     </div>
                 </form>

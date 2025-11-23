@@ -19,7 +19,9 @@ class ApplicationsService {
         if (typeof id.toString === "function") return id.toString();
         return id;
     }
-
+    public async getAllWithoutPagination(): Promise<IApplication[]> {
+        return await applicationRepository.getAllWithoutPagination();
+    }
     public async getAll(
         query: IApplicationQuery,
     ): Promise<IPaginatedResponse<IApplication>> {

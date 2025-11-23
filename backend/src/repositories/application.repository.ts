@@ -54,6 +54,9 @@ class ApplicationRepository {
 
         return { filterQuery, skip, sort, order, pageSize };
     }
+    public getAllWithoutPagination() {
+        return Application.find();
+    }
 
     public async getAll(
         query: IApplicationQuery,

@@ -23,6 +23,19 @@ class ApplicationController {
             next(e);
         }
     }
+    public async getAllWithoutPagination(
+        req: Request,
+        res: Response,
+        next: NextFunction,
+    ) {
+        try {
+            const response =
+                await applicationsService.getAllWithoutPagination();
+            res.json(response).status(StatusCodesEnum.OK);
+        } catch (e) {
+            next(e);
+        }
+    }
     public async getAll(req: Request, res: Response, next: NextFunction) {
         try {
             const query = req.query as any as IApplicationQuery;

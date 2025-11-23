@@ -10,7 +10,6 @@ const Menu = () => {
     useEffect(() => {
          dispatch(loginSliceActions.me())
     }, []);
-    console.log(user)
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
